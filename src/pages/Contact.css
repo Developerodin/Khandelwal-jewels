@@ -1,0 +1,50 @@
+.contact-header {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .contact-header h1 {
+    font-size: 1.5em;
+    color: #a52a2a; /* Custom color for the title */
+  }
+  
+  .contact-header p {
+    font-size: 1em;
+    color: #555;
+  }
+  
+  .contact-item {
+    margin-bottom: 20px;
+  }
+  
+  .contact-item ion-icon {
+    font-size: 1.5em;
+    margin-right: 10px;
+    color: #a52a2a; 
+  }
+  
+  .contact-item span {
+    color:#8E2927;
+    font-weight: bold;
+    margin-right: 10px;
+  }
+  
+  .contact-item p {
+    margin: 0;
+    color: black;
+  }
+  
+  h2 {
+    color: #a52a2a; 
+  }
+  .custom-h2 {
+    font-size: 22px;
+   
+    font-weight:600;  
+  }  
+  .back-button {
+    color: black;
+    font-size: 18px;
+    padding-left: 19px;
+    padding-top: 8px;
+  }  

@@ -1,0 +1,7 @@
+{
+  "name": "khandelwal-jewels",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react-vite"
+}

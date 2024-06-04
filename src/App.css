@@ -1,0 +1,22 @@
+.custom-tab-bar {
+    background: #800020;
+    border-radius: 80px  ;
+    height: 60px; /* Adjust the height as needed */
+    margin: 0 10px 10px 10px; /* Adding margins for spacing from left, right, and bottom */
+    padding: 5px;
+  }
+  
+  .custom-tab-bar .tab-button {
+    --color-selected: #fff;
+  }
+  
+  .tab-icon {
+    width: 24px;
+    height: 24px;
+  }
+  
+  .custom-tab-bar .tab-button ion-label {
+    font-size: 12px;
+    margin-top: 4px;
+  }
+  

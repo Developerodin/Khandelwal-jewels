@@ -1,0 +1,32 @@
+.custom-h1 {
+  font-size: 16px;
+ 
+  font-weight:600;  
+}
+
+
+.custom-card {
+    background: transparent;
+    --ion-background-color: transparent;
+    border: 1.42px solid #B87115;
+    border-radius: 12px;
+    margin-bottom: 16px;  /* Adding margin for better spacing */
+  }
+  
+  .custom-content {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .price-row {
+    display: flex;
+    justify-content: space-between;
+    margin: 4px 0;  /* Adding some vertical margin between rows */
+  }
+  
+  .price-row span {
+    font-size: 16px;  /* Adjust font size as needed */
+    color: #B87115;
+    line-height: 18px;  /* Adjust color as needed */
+  }
+  

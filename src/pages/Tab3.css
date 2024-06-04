@@ -1,0 +1,48 @@
+/* Form.css */
+.custom-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: black; /* Dark red color */
+    padding-left: 16px;
+    padding-top: 15px;
+    
+    
+  }
+
+
+
+  .form-container {
+    background-color: transparent; /* Light beige background color */
+    padding:16px;
+    border-radius: 8px;
+    margin-top: 5px;
+  }
+  
+  label {
+    color: black; /* Dark red color */
+    font-weight: 400;
+    display: block;
+  margin-bottom: 6px; 
+  font-size: 16px;
+  }
+  
+  input, select {
+    width: 100%;
+    padding: 20px;
+    margin-top: 8px;
+    border: 1px solid #B87115; /* Dark red border color */
+    border-radius: 8px;
+    box-sizing: border-box;
+    background-color: transparent; /* Light beige background color */
+  }
+  
+  .form-item {
+    margin-bottom: 16px;
+  }
+#makingCharges {
+    border:none;
+}
+
+#finalRate {
+    border:none;
+}

@@ -1,0 +1,21 @@
+.contact-us-button {
+    display: block;
+    width: 91%;
+    padding: 15px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    color: #fff;
+    background-color: #8E2927;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-left: 16px;
+    margin-bottom:90px;
+  }
+  
+  .contact-us-button:hover {
+    background-color: #a31818;
+
+  }
+  

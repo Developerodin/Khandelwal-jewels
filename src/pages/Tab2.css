@@ -1,0 +1,74 @@
+.custom-header {
+    background-color: #b71c1c;
+    color: #fff;
+    text-align: center;
+  }
+  
+  .header-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .logo {
+    width: 50px;
+    height: 50px;
+    margin-right: 10px;
+  }
+  
+  .custom-title {
+    font-size: 1.2em;
+    margin: 0;
+  }
+  
+  .address {
+    margin: 0;
+    font-size: 0.8em;
+  }
+  
+  .custom-content {
+    background-color: #F8EBD8 !important;
+  }
+  
+  .image-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px 0;
+  }
+  
+  .gold-image {
+    width: 100px;
+    height: auto;
+  }
+  
+  .table-header {
+    color:#8E2927;
+    font-weight: 500;
+    font-size: 16px;
+
+
+  }
+  
+  .table-row {
+    background-color: #f4e0c2;
+    margin-top: 10px;
+    padding: 15px;
+    border-radius: 8px;
+}
+
+  
+  .table-row:nth-child(even) {
+    background-color: #f4e0c2;
+    margin-top: 10px;
+  }
+  
+  .custom-tab-bar {
+    background-color: #b71c1c;
+    color: #fff;
+  }
+  
+  .ion-padding {
+    padding-bottom: 70px; /* Adjust for tab bar */
+  }
+  
