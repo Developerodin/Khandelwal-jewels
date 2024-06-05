@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonInput, IonItem, IonLabel, IonSelect, IonSelectOption,IonFooter } from '@ionic/react';
-import './Tab3.css';
+import './Calculator.css';
 import CustomTabBar from '../components/CustomTabBar';
 import Navbar from '../components/Navbar';
 
@@ -27,7 +27,9 @@ const Tab3 = () =>  {
     });
   };
 
-  const cities = ['Mumbai', 'Delhi', 'Bangalore', 'Chennai', 'Kolkata', 'Jaipur', 'Hyderabad', 'Pune', 'Ahmedabad', 'Surat'];
+  const types = ['Coins', 'Bars', 'Jewellery', 'Others'];
+     
+  const coins = ['1gm', '2gm', '5gm', '10gm', '25gm', '50gm', '75gm', '100gm'];
 
   return (
     <IonPage>
@@ -40,34 +42,34 @@ const Tab3 = () =>  {
           <div className="custom-title">Rate Calculator</div>
         <div className="form-container">
           <div className="form-item">
-            <label htmlFor="city">Select the item</label>
+            <label htmlFor="type">Select the item</label>
             <input
-              list="city-list"
-              id="city"
-              name="city"
-              value={formDetails.city}
+              list="type-list"
+              id="type"
+              name="type"
+              value={formDetails.type}
               onChange={handleChange}
               placeholder="eg. Coins"
             />
-            <datalist id="city-list">
-              {cities.map((city, index) => (
-                <option key={index} value={city} />
+          <datalist id="type-list">
+              {types.map((type, index) => (
+                <option key={index} value={type} />
               ))}
             </datalist>
           </div>
           <div className="form-item">
-            <label htmlFor="city">Enter Weight for the item</label>
+            <label htmlFor="coin">Enter Weight for the item</label>
             <input
-              list="city-list"
-              id="city"
-              name="city"
-              value={formDetails.city}
+              list="coin-list"
+              id="coin"
+              name="coin"
+              value={formDetails.coin}
               onChange={handleChange}
               placeholder="eg. 10 gms"
             />
-            <datalist id="city-list">
-              {cities.map((city, index) => (
-                <option key={index} value={city} />
+            <datalist id="coin-list">
+              {coins.map((coin, index) => (
+                <option key={index} value={coin} />
               ))}
             </datalist>
           </div>

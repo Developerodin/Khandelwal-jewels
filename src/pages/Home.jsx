@@ -5,7 +5,7 @@ import Navbar from '../components/Navbar.jsx';
 import ContactUsButton from '../components/ContactUsButton.jsx';
 import CustomTabBar from '../components/CustomTabBar.jsx';
 
-import './Tab1.css';
+import './Home.css';
 
 const Tab1 = () => {
 const history = useHistory();

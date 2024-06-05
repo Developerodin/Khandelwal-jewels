@@ -1,0 +1,54 @@
+.login-header {
+    background-color: #8E2927;
+  color: #fff;
+  text-align: center;
+  padding: 50px 0 30px;
+  border-bottom-left-radius: 50% 66%;
+  border-bottom-right-radius: 50% 66%;
+  }
+  
+  .login-header .logo {
+    width: 50px;
+    height: 50px;
+    margin-bottom: 10px;
+  }
+  
+  .login-header h2 {
+    margin: 0;
+    font-size: 1.5em;
+    color:white;
+  }
+  
+  .login-form {
+    
+    padding: 200px 20px 0px 20px;
+  }
+  
+  .otp-info {
+    text-align: center;
+    color: #8E2927;
+    margin: 20px 0;
+    font-size: 14px;
+  }
+  
+  ion-button {
+    background-color: #a52a2a;
+    color: #fff;
+  }
+  .custom-label {
+    margin-bottom: 10px;
+    padding-left: 16px;
+    padding-top: 10px;
+  }
+  
+  .custom-input {
+    box-sizing: border-box;
+    width: 90%;
+  
+    padding: 15px 20px;
+    margin-left: 15px;
+    border: 1px solid #8E2927;
+    border-radius: 8px;
+    margin-bottom: 15px;
+  }  
+  

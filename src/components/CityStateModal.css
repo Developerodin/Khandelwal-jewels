@@ -1,0 +1,26 @@
+.custom-modal .modal-wrapper {
+  width: 80%;
+  max-width: 500px;
+  height: 80%;
+  max-height: 600px;
+  margin: auto;
+  border-radius: 8px;
+}
+
+.custom-content {
+  --ion-background-color: #F2DFC4;
+  color: #8E2927;
+  border-radius: 8px;
+}
+
+.modal-header {
+  padding: 20px;
+}
+
+.custom-item {
+  color: #8E2927;
+}
+
+.custom-item.selected {
+  border: 1px solid #8E2927;
+}

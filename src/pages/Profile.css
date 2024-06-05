@@ -16,13 +16,14 @@
     padding:16px;
     border-radius: 8px;
     margin-top: 5px;
+    margin-bottom: 90px;
   }
   
   label {
     color: black; /* Dark red color */
     font-weight: 400;
     display: block;
-  margin-bottom: 6px; 
+  margin-bottom: 16px; 
   font-size: 16px;
   }
   
@@ -33,7 +34,8 @@
     border: 1px solid #B87115; /* Dark red border color */
     border-radius: 8px;
     box-sizing: border-box;
-    background-color: transparent; /* Light beige background color */
+    background-color: transparent; 
+   
   }
   
   .form-item {

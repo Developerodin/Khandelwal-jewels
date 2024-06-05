@@ -1,7 +1,7 @@
 import React from 'react';
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar,IonFooter,IonGrid,IonRow,IonCol } from '@ionic/react';
 import ExploreContainer from '../components/ExploreContainer';
-import './Tab2.css';
+import './Coin.css';
 import Navbar from '../components/Navbar';
 
 import CustomTabBar from '../components/CustomTabBar';

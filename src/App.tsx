@@ -10,13 +10,14 @@ import {
   setupIonicReact
 } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
-import Tab1 from './pages/Tab1.jsx';
-import Tab2 from './pages/Tab2.jsx';
-import Tab3 from './pages/Tab3.jsx';
-import Tab4 from './pages/Tab4.jsx';
+import Home from './pages/Home.jsx';
+import Coin from './pages/Coin.jsx';
+import Calculator from './pages/Calculator.jsx';
+import Profile from './pages/Profile.jsx';
 import Contact from './pages/Contact.jsx';
 import Login from './pages/Login.jsx';
 import LoginOtp from './pages/LoginOtp.jsx';
+import Signup from './pages/Signup.jsx';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -44,17 +45,17 @@ const App: React.FC = () => (
     <IonReactRouter>
       
         <IonRouterOutlet>
-          <Route exact path="/tab1">
-            <Tab1 />
+          <Route exact path="/home">
+            <Home />
           </Route>
-          <Route exact path="/tab2">
-            <Tab2 />
+          <Route exact path="/coin">
+            <Coin />
           </Route>
-          <Route  path="/tab3">
-            <Tab3 />
+          <Route  path="/calculator">
+            <Calculator />
           </Route>
-          <Route  path="/tab4">
-            <Tab4 />
+          <Route  path="/profile">
+            <Profile />
           </Route>
           <Route  path="/contact">
             <Contact />
@@ -65,8 +66,11 @@ const App: React.FC = () => (
           <Route  path="/loginotp">
             <LoginOtp />
           </Route>
+          <Route  path="/signup">
+            <Signup />
+          </Route>
           <Route exact path="/">
-            <Redirect to="/tab1" />
+            <Redirect to="/home" />
           </Route>
         </IonRouterOutlet>
         {/* <IonTabBar slot="bottom" style={{ backgroundColor: '#881917' }}>
