@@ -6,7 +6,7 @@ import ContactUsButton from '../components/ContactUsButton.jsx';
 import CustomTabBar from '../components/CustomTabBar.jsx';
 import Navbar from '../components/Navbar.jsx';
 
-const Tab4 = () => {
+const Profile = () => {
   const [fullName, setFullName] = useState("");
   const [formDetails, setFormDetails] = useState({ city: "", state: "", phoneNumber: "", address: "" });
   const [isCityModalOpen, setIsCityModalOpen] = useState(false);
@@ -159,4 +159,4 @@ const Tab4 = () => {
   );
 };
 
-export default Tab4;
+export default Profile;

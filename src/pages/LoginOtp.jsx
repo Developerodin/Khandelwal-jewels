@@ -9,20 +9,31 @@ import { Base_url } from "../config/BaseUrl.jsx";
 const LoginOtp = () => {
   const [otp, setOtp] = useState('');
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
   const history = useHistory(); // Use useHistory
   const [phoneNumber, setPhoneNumber] = useState('');
 
-  // useEffect(() => {
-  //   // Retrieve phone number from local storage
-  //   const storedPhoneNumber = localStorage.getItem('phoneNumber');
-  //   if (storedPhoneNumber) {
-  //     setPhoneNumber(storedPhoneNumber);
-  //   } else {
-  //     history.push('/Login'); // Navigate back to login if phone number is missing
-  //   }
-  // }, [history]);
+  useEffect(() => {
+    
+    const storedPhoneNumber = localStorage.getItem('phoneNumber');
+    if (storedPhoneNumber) {
+      setPhoneNumber(storedPhoneNumber);
+    } else {
+      history.push('/login'); 
+    }
+  }, [history]);
+
+  const showToast = (type, message) => {
+    alert(`${type}: ${message}`); 
+  };
 
   const handleLogin = async () => {
+    if (!otp) {
+      showToast('error', 'Please enter the OTP');
+      return;
+    }
+
+    setLoading(true);
     try {
       const response = await axios.post(`${Base_url}/verify-otp`, {
         phoneNumber,
@@ -31,13 +42,21 @@ const LoginOtp = () => {
 
       if (response.data.success) {
         console.log('OTP verified successfully');
-        history.push('/signup');
+        localStorage.setItem("Auth", true);
+        localStorage.setItem("token", response.data.access_token);
+        localStorage.setItem("userDetails", JSON.stringify(response.data.user));
+        localStorage.setItem("role", response.data.user.role);
+        showToast("success", response.data.message);
+        setLoading(false);
+        history.push('/Signup', 'root', 'replace');
       } else {
-        setError('Invalid OTP. Please try again.');
+        showToast('error', 'Invalid OTP. Please try again.');
+        setLoading(false);
       }
     } catch (error) {
       console.error('Error verifying OTP:', error);
-      setError('An error occurred while verifying OTP. Please try again.');
+      showToast('error', 'An error occurred while verifying OTP. Please try again.');
+      setLoading(false);
     }
   };
 
@@ -60,7 +79,7 @@ const LoginOtp = () => {
           />
           <p className="otp-info">Didn't receive the code?</p>
           {error && <p className="error-message">{error}</p>}
-          <ContactUsButton onClick={handleLogin} buttonName="Login" />
+          <ContactUsButton onClick={handleLogin} buttonName={loading ? 'Loading...' : 'Login'} disabled={loading} />
         </div>
       </IonContent>
     </IonPage>

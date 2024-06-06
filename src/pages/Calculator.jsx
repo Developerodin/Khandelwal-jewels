@@ -4,7 +4,7 @@ import './Calculator.css';
 import CustomTabBar from '../components/CustomTabBar';
 import Navbar from '../components/Navbar';
 
-const Tab3 = () =>  {
+const Calculator = () =>  {
   const [formDetails, setFormDetails] = useState({
     fullName: '',
     phoneNumber: '',
@@ -105,4 +105,4 @@ const Tab3 = () =>  {
   );
 };
 
-export default Tab3;
+export default Calculator;

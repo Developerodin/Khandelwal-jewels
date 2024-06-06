@@ -7,7 +7,7 @@ import CustomTabBar from '../components/CustomTabBar.jsx';
 
 import './Home.css';
 
-const Tab1 = () => {
+const Home = () => {
 const history = useHistory();
 
 const handleContactUsClick = () => {
@@ -118,4 +118,4 @@ const handleContactUsClick = () => {
   );
 };
 
-export default Tab1;
+export default Home;

@@ -18,7 +18,7 @@ const goldRates = [
 
 
 
-const Tab2 = () => {
+const Coin = () => {
   return (
     <IonPage>
       <Navbar />
@@ -53,4 +53,4 @@ const Tab2 = () => {
   );
 };
 
-export default Tab2;
+export default Coin;

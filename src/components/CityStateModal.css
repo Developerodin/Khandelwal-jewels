@@ -2,13 +2,13 @@
   width: 80%;
   max-width: 500px;
   height: 80%;
-  max-height: 600px;
+  max-height: 400px;
   margin: auto;
   border-radius: 8px;
 }
 
 .custom-content {
-  --ion-background-color: #F2DFC4;
+  --ion-background-color: #F8EBD8;
   color: #8E2927;
   border-radius: 8px;
 }
