@@ -1,70 +1,90 @@
-import React, { useState } from 'react';
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonInput, IonItem, IonLabel, IonSelect, IonSelectOption,IonFooter } from '@ionic/react';
-import './Calculator.css';
-import CustomTabBar from '../components/CustomTabBar';
-import Navbar from '../components/Navbar';
+import React, { useState } from "react";
+import { IonContent, IonHeader, IonPage, IonFooter } from "@ionic/react";
+import "./Calculator.css";
+import CustomTabBar from "../components/CustomTabBar";
+import Navbar from "../components/Navbar";
 
-const Calculator = () =>  {
+const Calculator = () => {
   const [formDetails, setFormDetails] = useState({
-    fullName: '',
-    phoneNumber: '',
-    city: '',
-    address: ''
+    type: "",
+    coin: "",
+    makingCharges: 0,
+    finalRate: 0,
   });
 
-  const handleChange = (e) => {
+  const types = ["Coins", "Bars", "Jewellery", "Others"];
+  const coins = ["1gm", "2gm", "5gm", "10gm", "25gm", "50gm", "75gm", "100gm"];
+
+  const goldRatePerGram = 7610;
+  const gstPercentage = 0.03;
+
+  const ratesTable = {
+    Coins: { makingChargesPercentage: 0.02 },
+    Bars: { makingChargesPercentage: 0.02 },
+    Jewellery: { makingChargesPercentage: 0.1 },
+    Others: { makingChargesPercentage: 0.1 },
+  };
+
+  const handleSelection = (e) => {
     const { name, value } = e.target;
-    setFormDetails({
-      ...formDetails,
-      [name]: value
-    });
-  };
+    let updatedDetails = { ...formDetails, [name]: value };
 
-  const handleSelectChange = (e) => {
-    setFormDetails({
-      ...formDetails,
-      city: e.detail.value
-    });
-  };
+    const type = name === "type" ? value : formDetails.type;
+    const coin = name === "coin" ? value : formDetails.coin;
+    const weight = parseFloat(coin.replace("gm", ""));
 
-  const types = ['Coins', 'Bars', 'Jewellery', 'Others'];
-     
-  const coins = ['1gm', '2gm', '5gm', '10gm', '25gm', '50gm', '75gm', '100gm'];
+    if (type && !isNaN(weight)) {
+      const goldCost = goldRatePerGram * weight;
+      const makingCharges = goldCost * ratesTable[type].makingChargesPercentage;
+      const gst = goldCost * gstPercentage;
+      const finalRate = goldCost + makingCharges + gst;
+
+      updatedDetails.makingCharges = makingCharges.toFixed(2);
+      updatedDetails.finalRate = finalRate.toFixed(2);
+    } else {
+      updatedDetails.makingCharges = 0;
+      updatedDetails.finalRate = 0;
+    }
+
+    setFormDetails(updatedDetails);
+  };
 
   return (
     <IonPage>
       <Navbar />
-  
-      <IonHeader>
-       
-      </IonHeader>
-      <IonContent className="ion-padding" fullscreen style={{'--ion-background-color': '#F8EBD8'}}>
-          <div className="custom-title">Rate Calculator</div>
+      <IonHeader></IonHeader>
+      <IonContent
+        className="ion-padding"
+        fullscreen
+        style={{ "--ion-background-color": "#F8EBD8" }}
+      >
+        <div className="custom-title">Rate Calculator</div>
         <div className="form-container">
           <div className="form-item">
             <label htmlFor="type">Select the item</label>
-            <input
-              list="type-list"
+            <select
               id="type"
               name="type"
               value={formDetails.type}
-              onChange={handleChange}
-              placeholder="eg. Coins"
-            />
-          <datalist id="type-list">
+              onChange={handleSelection}
+            >
+              <option value="">Select...</option>
               {types.map((type, index) => (
-                <option key={index} value={type} />
+                <option key={index} value={type}>
+                  {type}
+                </option>
               ))}
-            </datalist>
+            </select>
           </div>
           <div className="form-item">
             <label htmlFor="coin">Enter Weight for the item</label>
+
             <input
               list="coin-list"
               id="coin"
               name="coin"
               value={formDetails.coin}
-              onChange={handleChange}
+              onChange={handleSelection}
               placeholder="eg. 10 gms"
             />
             <datalist id="coin-list">
@@ -73,34 +93,35 @@ const Calculator = () =>  {
               ))}
             </datalist>
           </div>
-          <div className="form-item ">
+          <div className="form-item">
             <label htmlFor="makingCharges">Making Charges</label>
             <input
               type="text"
-              id="address"
-              name="address"
-              value={formDetails.address}
-              onChange={handleChange}
+              id="makingCharges"
+              name="makingCharges"
+              value={formDetails.makingCharges}
+              readOnly
               placeholder="00000"
+              style={{ borderRadius: "8px", backgroundColor: "#F2DFC4" }}
             />
           </div>
-          <div className="form-item ">
+          <div className="form-item">
             <label htmlFor="finalRate">Final rate with GST</label>
             <input
               type="text"
-              id="address"
-              name="address"
-              value={formDetails.address}
-              onChange={handleChange}
+              id="finalRate"
+              name="finalRate"
+              value={formDetails.finalRate}
+              readOnly
               placeholder="000000"
+              style={{ borderRadius: "8px", backgroundColor: "#F2DFC4" }}
             />
           </div>
         </div>
       </IonContent>
       <IonFooter>
-  
-  <CustomTabBar />
-</IonFooter>
+        <CustomTabBar />
+      </IonFooter>
     </IonPage>
   );
 };
