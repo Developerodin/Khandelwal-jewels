@@ -26,60 +26,40 @@ const Login = () => {
     alert(`${type}: ${message}`); 
   };
 
-  const checkMobile = async () => {
-    try {
-      setLoading(true);
-      const url = `${Base_url}auth/number_check`;
-      const formData1 = new FormData();
-      formData1.append('mobile_number', formData.phoneNumber);
-
-      const response = await axios.post(url, formData1, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        }
-      });
-
-      console.log("Response check mobile", response.data);
-
-      if (response.data.status === "success") {
-        setLoading(false);
-        history.push("/verify-otp");
-        setFormData({
-          phoneNumber: '',
-        });
-        return;
-      } else {
-        showToast("error", "Try After Some Time");
-        setLoading(false);
-      }
-    } catch (error) {
-      console.error('Error:', error);
-      showToast("error", "Try After Some Time");
-      setLoading(false);
-    }
-  };
-
   const handleContinue = async () => {
     if (formData.phoneNumber.length !== 10) {
       showToast('error', 'Wrong mobile number');
       return;
     }
-
+  
     setLoading(true);
     try {
-      const response = await axios.post(`${Base_url}/send-otp`, { phoneNumber: formData.phoneNumber });
-
-      if (response.data.success) {
+      const formData1 = new FormData();
+      formData1.append('mobile_number', formData.phoneNumber);
+  
+      const response = await axios.post(
+        `${Base_url}auth/number_check`,
+        formData1,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        }
+      );
+  
+      if (response.data.status === "success") {
+        // OTP sent successfully
         console.log('OTP sent successfully');
         localStorage.setItem('phoneNumber', formData.phoneNumber);
-        checkMobile(); 
+        history.push("/LoginOtp", { phoneNumber: formData.phoneNumber });
+        setFormData({ phoneNumber: '' });
       } else {
-        showToast('error', 'Failed to send OTP. Please try again.');
-        setLoading(false);
+        showToast("error", "Try After Some Time");
       }
     } catch (error) {
-      console.error('Error sending OTP:', error);
-      showToast('error', 'An error occurred while sending OTP. Please try again.');
+      console.error('Error:', error);
+      showToast("error", "An error occurred. Please try again.");
+    } finally {
       setLoading(false);
     }
   };

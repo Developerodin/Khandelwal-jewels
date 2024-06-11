@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { IonContent, IonPage } from '@ionic/react';
-import { useHistory } from 'react-router-dom'; // Import useHistory
+import { useHistory } from 'react-router-dom'; 
 import axios from 'axios';
 import './Login.css';
 import ContactUsButton from '../components/ContactUsButton.jsx';
@@ -10,11 +10,10 @@ const LoginOtp = () => {
   const [otp, setOtp] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const history = useHistory(); // Use useHistory
+  const history = useHistory(); 
   const [phoneNumber, setPhoneNumber] = useState('');
 
   useEffect(() => {
-    
     const storedPhoneNumber = localStorage.getItem('phoneNumber');
     if (storedPhoneNumber) {
       setPhoneNumber(storedPhoneNumber);
@@ -27,6 +26,10 @@ const LoginOtp = () => {
     alert(`${type}: ${message}`); 
   };
 
+  
+
+  
+
   const handleLogin = async () => {
     if (!otp) {
       showToast('error', 'Please enter the OTP');
@@ -35,9 +38,17 @@ const LoginOtp = () => {
 
     setLoading(true);
     try {
-      const response = await axios.post(`${Base_url}/verify-otp`, {
-        phoneNumber,
-        otp,
+      const formData1 = new FormData();
+      formData1.append('mobile_number', phoneNumber);
+      formData1.append('otp', otp);
+  
+
+      const response = await axios.post(`${Base_url}auth/verify_otp/${otp}`, formData1, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          // Add your other headers here if needed
+        },
+        
       });
 
       if (response.data.success) {
@@ -59,7 +70,7 @@ const LoginOtp = () => {
       setLoading(false);
     }
   };
-
+  
   return (
     <IonPage>
       <IonContent fullscreen style={{ '--ion-background-color': '#F8EBD8' }}>

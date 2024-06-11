@@ -1,1 +1,1 @@
-export const Base_url = 'https://your-backend-api.com';
+export const Base_url = 'https://asayjewels.com/public/';
