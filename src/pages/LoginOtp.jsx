@@ -26,10 +26,6 @@ const LoginOtp = () => {
     alert(`${type}: ${message}`); 
   };
 
-  
-
-  
-
   const handleLogin = async () => {
     if (!otp) {
       showToast('error', 'Please enter the OTP');
@@ -41,14 +37,11 @@ const LoginOtp = () => {
       const formData1 = new FormData();
       formData1.append('mobile_number', phoneNumber);
       formData1.append('otp', otp);
-  
 
       const response = await axios.post(`${Base_url}auth/verify_otp/${otp}`, formData1, {
         headers: {
           'Content-Type': 'multipart/form-data',
-          // Add your other headers here if needed
         },
-        
       });
 
       if (response.data.success) {
@@ -60,9 +53,13 @@ const LoginOtp = () => {
         showToast("success", response.data.message);
         setLoading(false);
         history.push('/Signup', 'root', 'replace');
-      } else {
-        showToast('error', 'Invalid OTP. Please try again.');
-        setLoading(false);
+      } 
+      
+      if(response.data === "user not found"){
+        history.push("/Signup");
+        setOtp("");
+        setLoading(false)
+        return;
       }
     } catch (error) {
       console.error('Error verifying OTP:', error);

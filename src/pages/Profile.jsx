@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { IonContent, IonPage, IonFooter } from '@ionic/react';
 import './Profile.css';
 import CityStateModal from '../components/CityStateModal.jsx';
 import ContactUsButton from '../components/ContactUsButton.jsx';
 import CustomTabBar from '../components/CustomTabBar.jsx';
 import Navbar from '../components/Navbar.jsx';
+import axios from 'axios';
+import { Base_url } from "../config/BaseUrl.jsx";
 
 const Profile = () => {
   const [fullName, setFullName] = useState("");
@@ -12,54 +14,50 @@ const Profile = () => {
   const [isCityModalOpen, setIsCityModalOpen] = useState(false);
   const [isStateModalOpen, setIsStateModalOpen] = useState(false);
 
+  useEffect(() => {
+    // Fetch existing user data here and populate the form
+    const storedPhoneNumber = localStorage.getItem('phoneNumber');
+    if (storedPhoneNumber) {
+      setFormDetails({ ...formDetails, phoneNumber: storedPhoneNumber });
+    } else {
+      console.error('Phone number is missing');
+    }
+  }, []);
+
   const cities = [
-    "Mumbai",
-    "Delhi",
-    "Bangalore",
-    "Chennai",
-    "Kolkata",
-    "Jaipur",
-    "Hyderabad",
-    "Pune",
-    "Ahmedabad",
-    "Surat",
+    "Mumbai", "Delhi", "Bangalore", "Chennai", "Kolkata",
+    "Jaipur", "Hyderabad", "Pune", "Ahmedabad", "Surat",
   ];
 
   const states = [
-    "Maharashtra",
-    "Delhi",
-    "Karnataka",
-    "Tamil Nadu",
-    "West Bengal",
-    "Rajasthan",
-    "Telangana",
-    "Gujarat",
-    "Uttar Pradesh",
-    "Madhya Pradesh",
+    "Maharashtra", "Delhi", "Karnataka", "Tamil Nadu", "West Bengal",
+    "Rajasthan", "Telangana", "Gujarat", "Uttar Pradesh", "Madhya Pradesh",
   ];
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormDetails({
-      ...formDetails,
-      [name]: value,
-    });
-  };
+  function handleChange(e) {
+    setFormDetails({ ...formDetails, [e.target.name]: e.target.value });
+  }
 
   const handleContinue = () => {
-    const formData = {
-      fullName,
-      ...formDetails,
-    };
-    console.log("Form Data:", formData);
-    // Add your form submission logic here, e.g., API call to save data
-    // axios.post('your_api_endpoint', formData)
-    //   .then(response => {
-    //     console.log('Form submitted successfully:', response);
-    //   })
-    //   .catch(error => {
-    //     console.error('Form submission error:', error);
-    //   });
+    const formData = new FormData();
+    formData.append('fullName', fullName);
+    formData.append('city', formDetails.city);
+    formData.append('state', formDetails.state);
+    formData.append('address', formDetails.address);
+    formData.append('mobile_number', formDetails.phoneNumber);
+
+    axios.post(`${Base_url}auth/register`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    })
+      .then(response => {
+        console.log('Profile updated successfully:', response);
+        // Optionally, redirect or give feedback to the user
+      })
+      .catch(error => {
+        console.error('Error updating profile:', error);
+      });
   };
 
   const handleCitySelect = (city) => {
@@ -98,6 +96,7 @@ const Profile = () => {
             onChange={handleChange}
             placeholder="Enter your phone number"
             style={{ marginBottom: '16px' }}
+            
           />
 
           <label htmlFor="state">State</label>
@@ -107,8 +106,7 @@ const Profile = () => {
             placeholder="Enter or select your state"
             onFocus={() => setIsStateModalOpen(true)}
             style={{ marginBottom: '16px' }}
-        
-            
+            readOnly
           />
 
           <label htmlFor="city">City</label>
@@ -118,8 +116,7 @@ const Profile = () => {
             placeholder="Enter or select your city"
             onFocus={() => setIsCityModalOpen(true)}
             style={{ marginBottom: '16px' }}
-            
-            
+            readOnly
           />
 
           <label htmlFor="address">Address</label>

@@ -1,8 +1,19 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { IonContent, IonHeader, IonPage, IonFooter } from "@ionic/react";
 import "./Calculator.css";
 import CustomTabBar from "../components/CustomTabBar";
 import Navbar from "../components/Navbar";
+import axios from "axios";
+import { Base_url } from "../config/BaseUrl.jsx";
+
+const gstPercentage = 0.03;
+
+const ratesTable = {
+  Coins: { makingChargesPercentage: 0.02 },
+  Bars: { makingChargesPercentage: 0.02 },
+  Jewellery: { makingChargesPercentage: 0.1 },
+  Others: { makingChargesPercentage: 0.1 },
+};
 
 const Calculator = () => {
   const [formDetails, setFormDetails] = useState({
@@ -11,19 +22,27 @@ const Calculator = () => {
     makingCharges: 0,
     finalRate: 0,
   });
+  const [goldRatePerGram, setGoldRatePerGram] = useState(0);
 
   const types = ["Coins", "Bars", "Jewellery", "Others"];
   const coins = ["1gm", "2gm", "5gm", "10gm", "25gm", "50gm", "75gm", "100gm"];
 
-  const goldRatePerGram = 7610;
-  const gstPercentage = 0.03;
-
-  const ratesTable = {
-    Coins: { makingChargesPercentage: 0.02 },
-    Bars: { makingChargesPercentage: 0.02 },
-    Jewellery: { makingChargesPercentage: 0.1 },
-    Others: { makingChargesPercentage: 0.1 },
-  };
+  useEffect(() => {
+    axios.get(`${Base_url}get_price`, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    })
+      .then(response => {
+        const priceData = response.data.post.find(price => price.name === "24k & 91.6 Gold");
+        if (priceData) {
+          setGoldRatePerGram(parseFloat(priceData.price));
+        }
+      })
+      .catch(error => {
+        console.error('Error fetching gold price:', error);
+      });
+  }, []);
 
   const handleSelection = (e) => {
     const { name, value } = e.target;
@@ -33,7 +52,7 @@ const Calculator = () => {
     const coin = name === "coin" ? value : formDetails.coin;
     const weight = parseFloat(coin.replace("gm", ""));
 
-    if (type && !isNaN(weight)) {
+    if (type && !isNaN(weight) && goldRatePerGram > 0) {
       const goldCost = goldRatePerGram * weight;
       const makingCharges = goldCost * ratesTable[type].makingChargesPercentage;
       const gst = goldCost * gstPercentage;
@@ -89,7 +108,7 @@ const Calculator = () => {
             />
             <datalist id="coin-list">
               {coins.map((coin, index) => (
-                <option key={index} value={coin} />
+                <option key={index} value={coin} style={{ color: 'blue', backgroundColor: 'yellow' }} />
               ))}
             </datalist>
           </div>

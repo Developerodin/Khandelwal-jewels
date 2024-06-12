@@ -48,7 +48,7 @@ const Login = () => {
       );
   
       if (response.data.status === "success") {
-        // OTP sent successfully
+       
         console.log('OTP sent successfully');
         localStorage.setItem('phoneNumber', formData.phoneNumber);
         history.push("/LoginOtp", { phoneNumber: formData.phoneNumber });

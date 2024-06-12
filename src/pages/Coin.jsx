@@ -3,8 +3,9 @@ import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonFooter, IonGri
 import './Coin.css';
 import Navbar from '../components/Navbar';
 import CustomTabBar from '../components/CustomTabBar';
+import axios from 'axios';
+import { Base_url } from "../config/BaseUrl.jsx";
 
-const baseRate = 7610;
 const gstPercentage = 0.03;
 
 const initialGoldRates = [
@@ -32,8 +33,22 @@ const Coin = () => {
   const [goldRates, setGoldRates] = useState(initialGoldRates);
 
   useEffect(() => {
-    const updatedRates = calculateFinalRates(baseRate, gstPercentage);
-    setGoldRates(updatedRates);
+    axios.get(`${Base_url}get_price`, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    })
+      .then(response => {
+        const priceData = response.data.post.find(price => price.name === "24k & 91.6 Gold");
+        if (priceData) {
+          const baseRate = parseFloat(priceData.price);
+          const updatedRates = calculateFinalRates(baseRate, gstPercentage);
+          setGoldRates(updatedRates);
+        }
+      })
+      .catch(error => {
+        console.error('Error fetching gold price:', error);
+      });
   }, []);
 
   return (
