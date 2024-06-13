@@ -11,7 +11,7 @@ const Navbar = () => {
             <img src="assets/Frame 1.png" alt="Khandelwal Abhushan" className="logo-icon" />
           </div>
           <div className="header-text">
-            <h2>Khandelwal Abhushan</h2>
+            <h1>Khandelwal Abhushan</h1>
             <p>M.G. Road, Near Shani Mandir, Akola, MH. - 444001</p>
           </div>
         </div>

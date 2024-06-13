@@ -43,6 +43,22 @@ const Home = () => {
     return finalPrice.toFixed(2); 
 };
 
+const calculateFinalPriceWithGst = (basePrice, makingPercentage) => {
+  
+  const makingPrice = basePrice * (makingPercentage / 100);
+
+
+  const intermediatePrice = basePrice + makingPrice;
+
+
+  const gst = intermediatePrice * 0.03;
+
+  
+  const finalPrice = intermediatePrice + gst;
+
+  return finalPrice.toFixed(2); 
+};
+
   return (
     <IonPage>
       <Navbar />
@@ -79,7 +95,7 @@ const Home = () => {
                       </div>
                       <div className="price-row">
                         <span>GST: 3%</span>
-                        <span> ₹ {calculateFinalPrice(price.price * 10, 3)}</span>
+                        <span> ₹ {calculateFinalPriceWithGst(price.price * 10,2)}</span>
                       </div>
                     </>
                   )}
@@ -91,7 +107,7 @@ const Home = () => {
                       </div>
                       <div className="price-row">
                         <span>GST: 3%</span>
-                        <span> ₹ {calculateFinalPrice(price.price * 10, 3)}</span>
+                        <span> ₹ {calculateFinalPriceWithGst(price.price * 10,11.35)}</span>
                       </div>
                     </>
                   )}
