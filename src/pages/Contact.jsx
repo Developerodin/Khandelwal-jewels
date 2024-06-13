@@ -46,7 +46,7 @@ const Contact = () => {
             <div className="contact-item">
               <IonIcon icon={mail} />
               <span>Email</span>
-              <p>Khandelwalabhushan@gmail.com</p>
+              <p>khandelwalabhushan@gmail.com</p>
             </div>
             <div className="contact-item">
               <IonIcon icon={call} />
@@ -56,7 +56,7 @@ const Contact = () => {
             <div className="contact-item">
               <IonIcon icon={logoWhatsapp} />
               <span>Whatsapp</span>
-              <p>+91 987654321</p>
+              <p>+91 9876543210</p>
             </div>
             <div className="contact-item">
               <IonIcon icon={globeOutline} />
@@ -66,7 +66,7 @@ const Contact = () => {
             <div className="contact-item">
               <IonIcon icon={location} />
               <span>Location</span>
-              <p>M.G. road, near shani mandir, Akola</p>
+              <p>M.G. Road, Near Shani Mandir, Akola, MH. - 444001</p>
             </div>
           </IonCardContent>
         </IonCard>

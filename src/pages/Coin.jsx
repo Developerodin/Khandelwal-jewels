@@ -64,12 +64,12 @@ const Coin = () => {
           <IonGrid>
             <IonRow className="table-header">
               <IonCol>Gms</IonCol>
-              <IonCol className='ion-text-end'>Live rate with GST</IonCol>
+              <IonCol className='ion-text-end'>Current rate with GST</IonCol>
             </IonRow>
             {goldRates.map((item, index) => (
               <IonRow key={index} className="table-row ">
                 <IonCol>{item.grams}</IonCol>
-                <IonCol className="ion-text-end">{item.rate}</IonCol>
+                <IonCol className="ion-text-end">  ₹ {item.rate}</IonCol>
               </IonRow>
             ))}
           </IonGrid>

@@ -102,9 +102,10 @@ const Signup = () => {
       <IonContent fullscreen style={{ "--ion-background-color": "#F8EBD8" }}>
         <div className="login-header">
           <img src="assets/Frame 1.png" alt="Logo" className="logo" />
-          <h2>New user?</h2>
-          <h2>Create an account</h2>
+          
         </div>
+        <h2>New user?</h2>
+          <h3>Create an account</h3>
         <div className="login-form">
           <label className="custom-label">Full name </label>
           <input

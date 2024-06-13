@@ -66,7 +66,7 @@ const Home = () => {
                     >
                       {price.name}
                     </IonCardTitle>
-                    <span>{parseFloat(price.price) * 10}</span>
+                    <span> ₹ {parseFloat(price.price) * 10}</span>
                   </div>
                 </IonCardHeader>
 
@@ -75,11 +75,11 @@ const Home = () => {
                     <>
                       <div className="price-row">
                         <span>Making: 2%</span>
-                        <span>{calculateFinalPrice(price.price * 10, 2)}</span>
+                        <span> ₹ {calculateFinalPrice(price.price * 10, 2)}</span>
                       </div>
                       <div className="price-row">
                         <span>GST: 3%</span>
-                        <span>{calculateFinalPrice(price.price * 10, 3)}</span>
+                        <span> ₹ {calculateFinalPrice(price.price * 10, 3)}</span>
                       </div>
                     </>
                   )}
@@ -87,11 +87,11 @@ const Home = () => {
                     <>
                       <div className="price-row">
                         <span>Making: 11.35%</span>
-                        <span>{calculateFinalPrice(price.price * 10, 11.35)}</span>
+                        <span> ₹ {calculateFinalPrice(price.price * 10, 11.35)}</span>
                       </div>
                       <div className="price-row">
                         <span>GST: 3%</span>
-                        <span>{calculateFinalPrice(price.price * 10, 3)}</span>
+                        <span> ₹ {calculateFinalPrice(price.price * 10, 3)}</span>
                       </div>
                     </>
                   )}
@@ -99,7 +99,7 @@ const Home = () => {
                   {price.name === "Old Gold 916" && (
                     <div className="price-row">
                       <span>Making: -8.4%</span>
-                      <span>{calculateFinalPrice(price.price * 10, -8.4)}</span>
+                      <span> ₹ {calculateFinalPrice(price.price * 10, -8.4)}</span>
                     </div>
                   )}
                 </IonCardContent>

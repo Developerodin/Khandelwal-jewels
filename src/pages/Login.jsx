@@ -48,7 +48,7 @@ const Login = () => {
       );
   
       if (response.data.status === "success") {
-       
+        // OTP sent successfully
         console.log('OTP sent successfully');
         localStorage.setItem('phoneNumber', formData.phoneNumber);
         history.push("/LoginOtp", { phoneNumber: formData.phoneNumber });
@@ -69,8 +69,8 @@ const Login = () => {
       <IonContent fullscreen style={{ '--ion-background-color': '#F8EBD8' }}>
         <div className="login-header">
           <img src="assets/Frame 1.png" alt="Logo" className="logo" />
-          <h2>Welcome</h2>
         </div>
+          <h2>Welcome</h2>
         <div className="login-form">
           <label className="custom-label">Enter your phone number</label>
           <input

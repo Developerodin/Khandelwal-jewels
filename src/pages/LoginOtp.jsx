@@ -67,17 +67,38 @@ const LoginOtp = () => {
       setLoading(false);
     }
   };
+
+  const handleResendCode = async (event) => {
+    event.preventDefault();
+  
+    try {
+      const response = await axios.post(`${Base_url}auth/number_check`, { phoneNumber }, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+  
+      if (response.status === 200) {
+        console.log('OTP Resent successfully');
+      } else {
+        console.log('Failed to resend OTP');
+      }
+    } catch (error) {
+      console.error('An error occurred while resending the OTP:', error);
+    }
+  };
   
   return (
     <IonPage>
       <IonContent fullscreen style={{ '--ion-background-color': '#F8EBD8' }}>
         <div className="login-header">
           <img src="assets/Frame 1.png" alt="Logo" className="logo" />
-          <h2>Log in to your</h2>
-          <h2>Account</h2>
+          
         </div>
+        <h2>Log in to your</h2>
+          <h3>Account</h3>
         <div className="login-form">
-          <label className="custom-label">Enter the OTP sent to {phoneNumber}</label>
+          <label className="custom-label">Enter the OTP sent to +91 {phoneNumber}</label>
           <input
             value={otp}
             placeholder="Enter OTP"
@@ -85,7 +106,9 @@ const LoginOtp = () => {
             type="tel"
             className="custom-input"
           />
-          <p className="otp-info">Didn't receive the code?</p>
+          <p className="otp-info">
+  <a href="#" onClick={handleResendCode} className="otp-info" style={{textDecorationLine:"none"}}>Didn't receive the code?</a>
+</p>
           {error && <p className="error-message">{error}</p>}
           <ContactUsButton onClick={handleLogin} buttonName={loading ? 'Loading...' : 'Login'} disabled={loading} />
         </div>

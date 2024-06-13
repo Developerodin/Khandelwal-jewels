@@ -8,20 +8,23 @@
   }
   
   .login-header .logo {
-    width: 50px;
-    height: 50px;
+    width: 100px;
+    height: 100px;
     margin-bottom: 10px;
   }
   
   .login-header h2 {
     margin: 0;
-    font-size: 1.5em;
+    font-size: 2em;
     color:white;
+    justify-content: center;
+    display: flex;
+    padding-top: 20px;
   }
   
   .login-form {
     
-    padding: 200px 20px 0px 20px;
+    padding: 140px 20px 0px 20px;
   }
   
   .otp-info {
@@ -49,3 +52,18 @@
     border: 1px solid #8E2927;
     border-radius: 8px;
   }  
+
+h2 {
+  justify-content: center;
+    display: flex;
+    padding-top: 60px;
+    font-size: 2em;
+} 
+h3 {
+  justify-content: center;
+    display: flex;
+    font-size: 2em;
+    color: #8E2927;
+    line-height: 1;
+    margin-top: 0;
+}   

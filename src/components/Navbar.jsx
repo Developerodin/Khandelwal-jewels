@@ -12,7 +12,7 @@ const Navbar = () => {
           </div>
           <div className="header-text">
             <h2>Khandelwal Abhushan</h2>
-            <p>M.G. road, near shani mandir, Akola 444001</p>
+            <p>M.G. Road, Near Shani Mandir, Akola, MH. - 444001</p>
           </div>
         </div>
     </IonHeader>
