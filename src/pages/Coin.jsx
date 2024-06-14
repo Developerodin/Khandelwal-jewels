@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonFooter, IonGrid, IonRow, IonCol } from '@ionic/react';
+import { IonContent, IonHeader, IonPage, IonFooter, IonGrid, IonRow, IonCol } from '@ionic/react';
 import './Coin.css';
 import Navbar from '../components/Navbar';
 import CustomTabBar from '../components/CustomTabBar';
@@ -29,6 +29,10 @@ const calculateFinalRates = (baseRate, gstPercentage) => {
   });
 };
 
+const formatPrice = (price) => {
+  return new Intl.NumberFormat("en-IN").format(price);
+};
+
 const Coin = () => {
   const [goldRates, setGoldRates] = useState(initialGoldRates);
 
@@ -54,8 +58,7 @@ const Coin = () => {
   return (
     <IonPage>
       <Navbar />
-      <IonHeader>
-      </IonHeader>
+      <IonHeader />
       <IonContent className="custom-content" fullscreen style={{ '--ion-background-color': '#F8EBD8' }}>
         <div style={{ padding: '16px', marginBottom: '90px' }}>
           <div className="image-container">
@@ -67,9 +70,9 @@ const Coin = () => {
               <IonCol className='ion-text-end'>Current rate with GST</IonCol>
             </IonRow>
             {goldRates.map((item, index) => (
-              <IonRow key={index} className="table-row ">
+              <IonRow key={index} className="table-row">
                 <IonCol>{item.grams}</IonCol>
-                <IonCol className="ion-text-end">  ₹ {item.rate}</IonCol>
+                <IonCol className="ion-text-end"> ₹ {formatPrice(item.rate)}</IonCol>
               </IonRow>
             ))}
           </IonGrid>

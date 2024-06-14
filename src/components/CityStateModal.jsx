@@ -14,7 +14,9 @@ const CityStateModal = ({ isOpen, onClose, onSelect, data, selectedItem }) => {
   const [results, setResults] = useState([]);
 
   useEffect(() => {
-    setResults(data);
+    if (data) {
+      setResults(data);
+    }
   }, [data]);
 
   const handleInput = (ev) => {

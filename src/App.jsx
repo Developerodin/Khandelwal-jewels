@@ -18,7 +18,7 @@ import Contact from './pages/Contact.jsx';
 import Login from './pages/Login.jsx';
 import LoginOtp from './pages/LoginOtp.jsx';
 import Signup from './pages/Signup.jsx';
-import { Base_url } from "./config/base_url";
+
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -41,8 +41,10 @@ import './theme/variables.css';
 
 setupIonicReact();
 
-const App: React.FC = () => (
-  <IonApp>
+const App = () => {
+  const Auth = localStorage.getItem("Auth") || false;
+
+return <IonApp>
     <IonReactRouter>
       
         <IonRouterOutlet>
@@ -73,11 +75,12 @@ const App: React.FC = () => (
           <Route exact path="/">
             <Redirect to="/Login" />
           </Route>
+          <Redirect  path="/" to={Auth ? "/home" : "/Login" }  exact/>
         </IonRouterOutlet>
         
       
     </IonReactRouter>
   </IonApp>
-);
+};
 
 export default App;

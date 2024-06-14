@@ -28,7 +28,7 @@
     flex-direction: column;
   }
   
-  .header-text h2 {
+  .header-h2 {
     font-family: 'Italiana' ,sans-serif;
     margin: 0;
     font-size: 27px; /* Increase font size */

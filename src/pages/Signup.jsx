@@ -10,43 +10,41 @@ import ContactUsButton from "../components/ContactUsButton.jsx";
 const Signup = () => {
   const [fullName, setFullName] = useState("");
   const [formDetails, setFormDetails] = useState({ city: "", state: "" });
+  const [states, setStates] = useState([]);
+  const [cities, setCities] = useState([]);
+  const [filteredCities, setFilteredCities] = useState([]);
   const [isCityModalOpen, setIsCityModalOpen] = useState(false);
   const [isStateModalOpen, setIsStateModalOpen] = useState(false);
-  const history = useHistory(); // Initialize the useHistory hook
+  const history = useHistory();
+
+  useEffect(() => {
+    const fetchStatesAndCities = async () => {
+      try {
+        const citiesResponse = await axios.get(`${Base_url}basic/all_city`, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        });
+        setCities(citiesResponse.data.post);
+
+        const uniqueStates = [
+          ...new Set(citiesResponse.data.post.map(city => city.state_name)),
+        ];
+        setStates(uniqueStates.map(state => ({ state_name: state })));
+      } catch (error) {
+        console.error("Error fetching states and cities:", error);
+      }
+    };
+
+    fetchStatesAndCities();
+  }, []);
 
   useEffect(() => {
     const storedPhoneNumber = localStorage.getItem('phoneNumber');
     if (!storedPhoneNumber) {
-      // Handle the case where the phone number is missing
       console.error('Phone number is missing');
     }
   }, []);
-
-  const cities = [
-    "Mumbai",
-    "Delhi",
-    "Bangalore",
-    "Chennai",
-    "Kolkata",
-    "Jaipur",
-    "Hyderabad",
-    "Pune",
-    "Ahmedabad",
-    "Surat",
-  ];
-
-  const states = [
-    "Maharashtra",
-    "Delhi",
-    "Karnataka",
-    "Tamil Nadu",
-    "West Bengal",
-    "Rajasthan",
-    "Telangana",
-    "Gujarat",
-    "Uttar Pradesh",
-    "Madhya Pradesh",
-  ];
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -65,13 +63,11 @@ const Signup = () => {
     }
 
     const formData = new FormData();
-    formData.append('fullName', fullName);
+    formData.append('name', fullName);
     formData.append('city', formDetails.city);
     formData.append('state', formDetails.state);
-    formData.append('address', ""); // Setting address as an empty string
+    formData.append('address', "");
     formData.append('mobile_number', storedPhoneNumber);
-
-    console.log("Form Data:", formData);
 
     axios.post(`${Base_url}auth/register`, formData, {
       headers: {
@@ -79,8 +75,11 @@ const Signup = () => {
       },
     })
       .then(response => {
-        console.log('Form submitted successfully:', response);
-        history.push('/home'); // Navigate to /home on success
+        console.log('Form successfully submitted', response);
+        if(response.data.status === "success"){
+          history.push('/Login');
+        }
+       
       })
       .catch(error => {
         console.error('Form submission error:', error);
@@ -94,7 +93,17 @@ const Signup = () => {
 
   const handleStateSelect = (state) => {
     setFormDetails({ ...formDetails, state });
+    const uniqueStates = [...new Set(cities.filter(item => item.state_name === state))];
+    const uniqueCity = [...new Set(uniqueStates.map(item => item.city_name))];
+    setFilteredCities(uniqueCity);
     setIsStateModalOpen(false);
+    setIsCityModalOpen(true);
+  };
+
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter') {
+      handleContinue();
+    }
   };
 
   return (
@@ -102,11 +111,10 @@ const Signup = () => {
       <IonContent fullscreen style={{ "--ion-background-color": "#F8EBD8" }}>
         <div className="login-header">
           <img src="assets/Frame 1.png" alt="Logo" className="logo" />
-          
         </div>
-        <h2>New user?</h2>
-          <h3>Create an account</h3>
-        <div className="login-form">
+        <h2 style={{ fontSize: '28px' }}>New user?</h2>
+        <h3 style={{ fontSize: '28px', marginTop: '0' }}>Create an account</h3>
+        <div className="login-form signup">
           <label className="custom-label">Full name </label>
           <input
             value={fullName}
@@ -114,6 +122,7 @@ const Signup = () => {
             onChange={(e) => setFullName(e.target.value)}
             type="text"
             className="custom-input"
+            onKeyDown={handleKeyDown}
           />
 
           <label className="custom-label">State</label>
@@ -124,6 +133,7 @@ const Signup = () => {
             onFocus={() => setIsStateModalOpen(true)}
             className="custom-input"
             readOnly
+            onKeyDown={handleKeyDown}
           />
 
           <label className="custom-label">City</label>
@@ -134,16 +144,18 @@ const Signup = () => {
             onFocus={() => setIsCityModalOpen(true)}
             className="custom-input"
             readOnly
+            onKeyDown={handleKeyDown}
+
           />
 
-          <ContactUsButton onClick={handleContinue} buttonName="Explore" />
+          <ContactUsButton onClick={handleContinue} buttonName="Explore" onKey />
         </div>
 
         <CityStateModal
           isOpen={isCityModalOpen}
           onClose={() => setIsCityModalOpen(false)}
           onSelect={handleCitySelect}
-          data={cities}
+          data={filteredCities}
           selectedItem={formDetails.city}
         />
 
@@ -151,7 +163,7 @@ const Signup = () => {
           isOpen={isStateModalOpen}
           onClose={() => setIsStateModalOpen(false)}
           onSelect={handleStateSelect}
-          data={states}
+          data={states.map(state => state.state_name)}
           selectedItem={formDetails.state}
         />
       </IonContent>

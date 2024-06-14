@@ -64,14 +64,20 @@ const Login = () => {
     }
   };
 
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter') {
+      handleContinue();
+    }
+  };
+
   return (
     <IonPage>
       <IonContent fullscreen style={{ '--ion-background-color': '#F8EBD8' }}>
         <div className="login-header">
           <img src="assets/Frame 1.png" alt="Logo" className="logo" />
         </div>
-          <h2>Welcome</h2>
-        <div className="login-form">
+          <h2 className='welcome' style={{fontSize:'28px',color:'#a52a2a'}}>Welcome</h2>
+        <div className="login-form login">
           <label className="custom-label">Enter your phone number</label>
           <input
             name="phoneNumber"
@@ -80,6 +86,7 @@ const Login = () => {
             onChange={handleChange}
             type="tel"
             className="custom-input"
+            onKeyDown={handleKeyDown}
           />
           <p className="otp-info">We'll send an OTP to the above phone number.</p>
           {error && <p className="error-message">{error}</p>}

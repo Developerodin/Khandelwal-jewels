@@ -3,8 +3,6 @@ import {
   IonContent,
   IonHeader,
   IonPage,
-  IonTitle,
-  IonToolbar,
   IonCard,
   IonCardContent,
   IonIcon,
@@ -43,30 +41,51 @@ const Contact = () => {
         <div className="custom-title">Contact</div>
         <IonCard>
           <IonCardContent style={{ backgroundColor: "#F2DFC4" }}>
+            <div>
             <div className="contact-item">
               <IonIcon icon={mail} />
-              <span>Email</span>
-              <p>khandelwalabhushan@gmail.com</p>
+              <div>
+                <span>Email</span>
+              </div>
+             
             </div>
+            <p style={{marginTop:"4px",color:"black"}}>khandelwalabhushan@gmail.com</p>
+            </div>
+            <div>
             <div className="contact-item">
               <IonIcon icon={call} />
-              <span>Phone</span>
-              <p>0141 0000000</p>
+              <div>
+                <span>Phone</span>
+              </div>
             </div>
+                <p style={{marginTop:"4px",color:"black"}} >0141 0000000</p>
+            </div>
+            <div>
             <div className="contact-item">
               <IonIcon icon={logoWhatsapp} />
-              <span>Whatsapp</span>
-              <p>+91 9876543210</p>
+              <div>
+                <span>Whatsapp</span>
+              </div>
             </div>
+                <p style={{marginTop:"4px",color:"black"}}>+91 9876543210</p>
+            </div>
+            <div>
             <div className="contact-item">
               <IonIcon icon={globeOutline} />
-              <span>Website</span>
-              <p>www.khandelwalabhushan.com</p>
+              <div>
+                <span>Website</span>
+              </div>
             </div>
+                <p style={{marginTop:"4px",color:"black"}}>www.khandelwalabhushan.com</p>
+            </div>
+            <div>
             <div className="contact-item">
               <IonIcon icon={location} />
-              <span>Location</span>
-              <p>M.G. Road, Near Shani Mandir, Akola, MH. - 444001</p>
+              <div>
+                <span>Location</span>
+              </div>
+            </div>
+                <p style={{marginTop:"4px",color:"black",marginBottom:'6px'}} >M.G. Road, Near Shani Mandir, Akola, MH. - 444001</p>
             </div>
           </IonCardContent>
         </IonCard>

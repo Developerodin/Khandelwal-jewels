@@ -11,8 +11,8 @@ const gstPercentage = 0.03;
 const ratesTable = {
   Coins: { makingChargesPercentage: 0.02 },
   Bars: { makingChargesPercentage: 0.02 },
-  Jewellery: { makingChargesPercentage: 0.1 },
-  Others: { makingChargesPercentage: 0.1 },
+  Jewellery: { makingChargesPercentage: 0.2 },
+  Others: { makingChargesPercentage: 0.2 },
 };
 
 const Calculator = () => {
@@ -28,19 +28,22 @@ const Calculator = () => {
   const coins = ["1gm", "2gm", "5gm", "10gm", "25gm", "50gm", "75gm", "100gm"];
 
   useEffect(() => {
-    axios.get(`${Base_url}get_price`, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    })
-      .then(response => {
-        const priceData = response.data.post.find(price => price.name === "24k & 91.6 Gold");
+    axios
+      .get(`${Base_url}get_price`, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
+      .then((response) => {
+        const priceData = response.data.post.find(
+          (price) => price.name === "24k & 91.6 Gold"
+        );
         if (priceData) {
           setGoldRatePerGram(parseFloat(priceData.price));
         }
       })
-      .catch(error => {
-        console.error('Error fetching gold price:', error);
+      .catch((error) => {
+        console.error("Error fetching gold price:", error);
       });
   }, []);
 
@@ -55,17 +58,22 @@ const Calculator = () => {
     if (type && !isNaN(weight) && goldRatePerGram > 0) {
       const goldCost = goldRatePerGram * weight;
       const makingCharges = goldCost * ratesTable[type].makingChargesPercentage;
-      const gst = goldCost * gstPercentage;
-      const finalRate = goldCost + makingCharges + gst;
+      const subtotal = goldCost + makingCharges;
+      const gst = subtotal * gstPercentage;
+      const finalRate = subtotal + gst;
 
-      updatedDetails.makingCharges = makingCharges.toFixed(2);
-      updatedDetails.finalRate = finalRate.toFixed(2);
+      updatedDetails.makingCharges = formatPrice(makingCharges.toFixed(0));
+      updatedDetails.finalRate = formatPrice(finalRate.toFixed(0));
     } else {
       updatedDetails.makingCharges = 0;
       updatedDetails.finalRate = 0;
     }
 
     setFormDetails(updatedDetails);
+  };
+
+  const formatPrice = (price) => {
+    return `₹ ${new Intl.NumberFormat("en-IN").format(price)}`;
   };
 
   return (
@@ -80,6 +88,7 @@ const Calculator = () => {
         <div className="custom-title">Rate Calculator</div>
         <div className="form-container">
           <div className="form-item">
+            
             <label htmlFor="type">Select the item</label>
             <select
               id="type"
@@ -94,6 +103,7 @@ const Calculator = () => {
                 </option>
               ))}
             </select>
+            
           </div>
           <div className="form-item">
             <label htmlFor="coin">Enter Weight for the item</label>
@@ -106,11 +116,15 @@ const Calculator = () => {
               onChange={handleSelection}
               placeholder="eg. 10 gms"
             />
-            <datalist id="coin-list">
+            {/* <datalist id="coin-list">
               {coins.map((coin, index) => (
-                <option key={index} value={coin} style={{ color: 'blue', backgroundColor: 'yellow' }} />
+                <option
+                  key={index}
+                  value={coin}
+                  style={{ color: "blue", backgroundColor: "yellow" }}
+                />
               ))}
-            </datalist>
+            </datalist> */}
           </div>
           <div className="form-item">
             <label htmlFor="makingCharges">Making Charges</label>
@@ -118,7 +132,7 @@ const Calculator = () => {
               type="text"
               id="makingCharges"
               name="makingCharges"
-              value={formDetails.makingCharges}
+              value=  {formDetails.makingCharges}
               readOnly
               placeholder="00000"
               style={{ borderRadius: "8px", backgroundColor: "#F2DFC4" }}

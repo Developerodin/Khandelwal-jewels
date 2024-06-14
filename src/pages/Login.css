@@ -22,7 +22,7 @@
     padding-top: 20px;
   }
   
-  .login-form {
+  .login {
     
     padding: 140px 20px 0px 20px;
   }
@@ -59,7 +59,7 @@ h2 {
     padding-top: 60px;
     font-size: 2em;
 } 
-h3 {
+.welcome {
   justify-content: center;
     display: flex;
     font-size: 2em;

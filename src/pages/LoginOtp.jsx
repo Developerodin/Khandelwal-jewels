@@ -44,26 +44,26 @@ const LoginOtp = () => {
         },
       });
 
-      if (response.data.success) {
+      if (response.data.status === 'success') {
         console.log('OTP verified successfully');
         localStorage.setItem("Auth", true);
         localStorage.setItem("token", response.data.access_token);
-        localStorage.setItem("userDetails", JSON.stringify(response.data.user));
-        localStorage.setItem("role", response.data.user.role);
+        if (response.data.user) {
+          localStorage.setItem("userDetails", JSON.stringify(response.data.user));
+          
+        }
         showToast("success", response.data.message);
-        setLoading(false);
-        history.push('/Signup', 'root', 'replace');
-      } 
-      
-      if(response.data === "user not found"){
+        history.push('/home', 'root', 'replace');
+      } else if (response.data === "user not found") {
         history.push("/Signup");
         setOtp("");
-        setLoading(false)
-        return;
+      } else {
+        showToast('error', response.data.message);
       }
     } catch (error) {
       console.error('Error verifying OTP:', error);
       showToast('error', 'An error occurred while verifying OTP. Please try again.');
+    } finally {
       setLoading(false);
     }
   };
@@ -87,17 +87,21 @@ const LoginOtp = () => {
       console.error('An error occurred while resending the OTP:', error);
     }
   };
-  
+
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter') {
+      handleLogin();
+    }
+  };
+
   return (
     <IonPage>
       <IonContent fullscreen style={{ '--ion-background-color': '#F8EBD8' }}>
         <div className="login-header">
           <img src="assets/Frame 1.png" alt="Logo" className="logo" />
-          
         </div>
-        <h2>Log in to your</h2>
-          <h3>Account</h3>
-        <div className="login-form">
+        <h2 style={{fontSize:'28px'}}>Log in to your Account</h2>
+        <div className="loginotp" style={{padding:'120px 20px 0px 20px '}}>
           <label className="custom-label">Enter the OTP sent to +91 {phoneNumber}</label>
           <input
             value={otp}
@@ -105,10 +109,11 @@ const LoginOtp = () => {
             onChange={(e) => setOtp(e.target.value)}
             type="tel"
             className="custom-input"
+            onKeyDown={handleKeyDown}
           />
           <p className="otp-info">
-  <a href="#" onClick={handleResendCode} className="otp-info" style={{textDecorationLine:"none"}}>Didn't receive the code?</a>
-</p>
+            <a href="#" onClick={handleResendCode} className="otp-info" style={{textDecorationLine:"none"}}>Didn't receive the code?</a>
+          </p>
           {error && <p className="error-message">{error}</p>}
           <ContactUsButton onClick={handleLogin} buttonName={loading ? 'Loading...' : 'Login'} disabled={loading} />
         </div>

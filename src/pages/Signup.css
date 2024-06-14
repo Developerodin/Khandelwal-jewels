@@ -22,7 +22,7 @@
     padding-top: 20px;
   }
   
-  .login-form {
+  .signup{
     
     padding: 40px 20px 0px 20px;
   }
@@ -63,8 +63,7 @@
   h3 {
     justify-content: center;
       display: flex;
-      font-size: 2em;
-      color: #8E2927;
-      line-height: 1;
+      font-size: 24px;
+      color: #a52a2a;
       margin-top: 0;
   }    

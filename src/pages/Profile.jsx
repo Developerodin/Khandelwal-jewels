@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { IonContent, IonPage, IonFooter } from '@ionic/react';
+import { IonContent, IonPage, IonFooter, IonButton, IonIcon } from '@ionic/react';
 import './Profile.css';
 import CityStateModal from '../components/CityStateModal.jsx';
 import ContactUsButton from '../components/ContactUsButton.jsx';
@@ -7,46 +7,72 @@ import CustomTabBar from '../components/CustomTabBar.jsx';
 import Navbar from '../components/Navbar.jsx';
 import axios from 'axios';
 import { Base_url } from "../config/BaseUrl.jsx";
+import { logOutOutline } from 'ionicons/icons';
 
 const Profile = () => {
-  const [fullName, setFullName] = useState("");
-  const [formDetails, setFormDetails] = useState({ city: "", state: "", phoneNumber: "", address: "" });
+
+  const [formDetails, setFormDetails] = useState(
+    { 
+      name:"",
+      city: "", 
+      state: "", 
+      phoneNumber: "",
+      address: "" 
+    }
+  );
   const [isCityModalOpen, setIsCityModalOpen] = useState(false);
   const [isStateModalOpen, setIsStateModalOpen] = useState(false);
+  const [states, setStates] = useState([]); // State list
+  const [cities, setCities] = useState([]); // Complete list of cities
+  const [filteredCities, setFilteredCities] = useState([]); // Filtered list of cities
 
   useEffect(() => {
-    // Fetch existing user data here and populate the form
-    const storedPhoneNumber = localStorage.getItem('phoneNumber');
-    if (storedPhoneNumber) {
-      setFormDetails({ ...formDetails, phoneNumber: storedPhoneNumber });
-    } else {
-      console.error('Phone number is missing');
-    }
+    const fetchStatesAndCities = async () => {
+      try {
+        const citiesResponse = await axios.get(`${Base_url}basic/all_city`, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        });
+        setCities(citiesResponse.data.post); // Adjust according to the API response structure
+
+        // Extract unique states from cities data
+        const uniqueStates = [
+          ...new Set(citiesResponse.data.post.map(city => city.state_name)),
+        ];
+        setStates(uniqueStates.map(state => ({ state_name: state })));
+      } catch (error) {
+        console.error("Error fetching states and cities:", error);
+      }
+    };
+
+    fetchStatesAndCities();
   }, []);
 
-  const cities = [
-    "Mumbai", "Delhi", "Bangalore", "Chennai", "Kolkata",
-    "Jaipur", "Hyderabad", "Pune", "Ahmedabad", "Surat",
-  ];
+  // useEffect(() => {
+  //   const storedPhoneNumber = localStorage.getItem('phoneNumber');
+  //   if (storedPhoneNumber) {
+  //     setFormDetails({ ...formDetails, phoneNumber: storedPhoneNumber });
+  //   } else {
+  //     console.error('Phone number is missing');
+  //   }
+  // }, []);
 
-  const states = [
-    "Maharashtra", "Delhi", "Karnataka", "Tamil Nadu", "West Bengal",
-    "Rajasthan", "Telangana", "Gujarat", "Uttar Pradesh", "Madhya Pradesh",
-  ];
-
-  function handleChange(e) {
+  const handleChange = (e) => {
     setFormDetails({ ...formDetails, [e.target.name]: e.target.value });
-  }
+  };
 
   const handleContinue = () => {
     const formData = new FormData();
-    formData.append('fullName', fullName);
+    formData.append('user_id', formDetails.id);
+    formData.append('name', formDetails.name);
     formData.append('city', formDetails.city);
     formData.append('state', formDetails.state);
     formData.append('address', formDetails.address);
-    formData.append('mobile_number', formDetails.phoneNumber);
 
-    axios.post(`${Base_url}auth/register`, formData, {
+   
+
+    axios.post(`${Base_url}auth/user_update`, formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
@@ -54,6 +80,10 @@ const Profile = () => {
       .then(response => {
         console.log('Profile updated successfully:', response);
         // Optionally, redirect or give feedback to the user
+        if (response.data.user) {
+          localStorage.setItem("userDetails", JSON.stringify(response.data.user));
+           
+        }
       })
       .catch(error => {
         console.error('Error updating profile:', error);
@@ -67,24 +97,71 @@ const Profile = () => {
 
   const handleStateSelect = (state) => {
     setFormDetails({ ...formDetails, state });
+    // Filter cities based on the selected state
+    // const filtered = [
+    //   ...new Set(cities.filter(city => city.state_name === state)),
+    // ];
+    const uniqueStates = [...new Set(cities.filter(item => item.state_name === state))];
+    console.log(uniqueStates);
+               const uniqueCity = [...new Set(uniqueStates.map(item => item.city_name))];
+                console.log(uniqueCity);
+    // const filtered = cities.filter(city => city.state_name === state);
+    setFilteredCities(uniqueCity);
     setIsStateModalOpen(false);
+    setIsCityModalOpen(true); // Open city modal after selecting state
   };
+  
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter') {
+      handleContinue();
+    }
+  };
+
+  const handleLogout = ()=>{
+    localStorage.clear();
+    window.location.href = "/Login";
+  
+  }
+
+
+  useEffect(()=>{
+   const user = JSON.parse(localStorage.getItem("userDetails"));
+   const storedPhoneNumber = localStorage.getItem('phoneNumber');
+   const userData = { 
+    id:user.user_id,
+    name:user.name,
+    city: user.city, 
+    state: user.state, 
+    phoneNumber: storedPhoneNumber,
+    address: user.address 
+  }
+   setFormDetails(userData);
+   
+  },[])
 
   return (
     <IonPage>
       <Navbar />
       <IonContent className="ion-padding" fullscreen style={{ '--ion-background-color': '#F8EBD8' }}>
-        <div className="custom-title">Personal Details</div>
+        <div className="custom-title"  >
+          <span>Personal Details</span>
+
+         
+          <IonIcon onClick={handleLogout} style={{fontSize:"30px",color:"#b71c1c"}} icon={logOutOutline}></IonIcon>
+          
+
+          </div>
         <div className="form-container">
           <label htmlFor="fullName">Full name</label>
           <input
             type="text"
-            id="fullName"
-            name="fullName"
-            value={fullName}
-            onChange={(e) => setFullName(e.target.value)}
+            id="name"
+            name="name"
+            value={formDetails.name}
+            onChange={handleChange}
             placeholder="Enter your full name"
             style={{ marginBottom: '16px' }}
+            onKeyDown={handleKeyDown}
           />
 
           <label htmlFor="phoneNumber">Phone number</label>
@@ -93,10 +170,10 @@ const Profile = () => {
             id="phoneNumber"
             name="phoneNumber"
             value={formDetails.phoneNumber}
-            onChange={handleChange}
+        
             placeholder="Enter your phone number"
             style={{ marginBottom: '16px' }}
-            
+            onKeyDown={handleKeyDown}
           />
 
           <label htmlFor="state">State</label>
@@ -107,6 +184,7 @@ const Profile = () => {
             onFocus={() => setIsStateModalOpen(true)}
             style={{ marginBottom: '16px' }}
             readOnly
+            onKeyDown={handleKeyDown}
           />
 
           <label htmlFor="city">City</label>
@@ -117,6 +195,7 @@ const Profile = () => {
             onFocus={() => setIsCityModalOpen(true)}
             style={{ marginBottom: '16px' }}
             readOnly
+            onKeyDown={handleKeyDown}
           />
 
           <label htmlFor="address">Address</label>
@@ -128,6 +207,7 @@ const Profile = () => {
             onChange={handleChange}
             placeholder="Enter your address"
             style={{ marginBottom: '16px' }}
+            onKeyDown={handleKeyDown}
           />
 
           <ContactUsButton onClick={handleContinue} buttonName="Submit" />
@@ -137,7 +217,7 @@ const Profile = () => {
           isOpen={isStateModalOpen}
           onClose={() => setIsStateModalOpen(false)}
           onSelect={handleStateSelect}
-          data={states}
+          data={states.map(state => state.state_name)} // Displaying state names
           selectedItem={formDetails.state}
         />
 
@@ -145,7 +225,7 @@ const Profile = () => {
           isOpen={isCityModalOpen}
           onClose={() => setIsCityModalOpen(false)}
           onSelect={handleCitySelect}
-          data={cities}
+          data={filteredCities} // Displaying city names
           selectedItem={formDetails.city}
         />
       </IonContent>
