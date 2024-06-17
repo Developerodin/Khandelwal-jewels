@@ -1,1 +1,1 @@
-export const Base_url = 'https://asayjewels.com/public/';
+export const Base_url = 'https://rates.khandelwalabhushan.com/admin/';
