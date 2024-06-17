@@ -14,11 +14,19 @@ import Navbar from "../components/Navbar.jsx";
 import ContactUsButton from "../components/ContactUsButton.jsx";
 import CustomTabBar from "../components/CustomTabBar.jsx";
 import { Base_url } from "../config/BaseUrl.jsx";
+import useStatusBar from '../hooks/useStatusBar'; 
+import { StatusBar, Style } from '@capacitor/status-bar';
 import "./Home.css";
 
 const Home = () => {
   const [prices, setPrices] = useState([]);
   const history = useHistory();
+
+  useStatusBar({
+    overlay: false,
+    style: Style.Light,
+    color: '#F8EBD8'
+  });
 
   useEffect(() => {
     axios

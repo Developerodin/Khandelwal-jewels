@@ -19,8 +19,16 @@ import {
 } from "ionicons/icons";
 import "./Contact.css";
 import Navbar from "../components/Navbar.jsx";
+import useStatusBar from '../hooks/useStatusBar'; 
+import { StatusBar, Style } from '@capacitor/status-bar';
 
 const Contact = () => {
+  useStatusBar({
+    overlay: false,
+    style: Style.Light,
+    color: '#F8EBD8'
+  });
+
   return (
     <IonPage>
       <Navbar />

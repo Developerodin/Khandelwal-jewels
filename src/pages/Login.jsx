@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import { IonContent, IonPage } from '@ionic/react';
+import { IonContent, IonPage, useIonViewWillEnter } from '@ionic/react';
+import { StatusBar, Style } from '@capacitor/status-bar';
+import useStatusBar from '../hooks/useStatusBar'; 
 import { useHistory } from 'react-router-dom';
 import axios from 'axios';
 import './Login.css';
@@ -7,12 +9,19 @@ import ContactUsButton from '../components/ContactUsButton.jsx';
 import { Base_url } from "../config/BaseUrl.jsx";
 
 const Login = () => {
+
   const history = useHistory();
   const [formData, setFormData] = useState({
     phoneNumber: '',
   });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+
+  useStatusBar({
+    overlay: false,
+    style: Style.Dark,
+    color: '#8E2927'
+  });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -76,7 +85,7 @@ const Login = () => {
         <div className="login-header">
           <img src="assets/Frame 1.png" alt="Logo" className="logo" />
         </div>
-          <h2 className='welcome' style={{fontSize:'28px',color:'#a52a2a'}}>Welcome</h2>
+        <h2 className='welcome' style={{fontSize:'28px',color:'#a52a2a'}}>Welcome</h2>
         <div className="login-form login">
           <label className="custom-label">Enter your phone number</label>
           <input

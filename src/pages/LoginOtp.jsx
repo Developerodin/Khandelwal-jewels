@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { IonContent, IonPage } from '@ionic/react';
 import { useHistory } from 'react-router-dom'; 
+import useStatusBar from '../hooks/useStatusBar'; 
+import { StatusBar, Style } from '@capacitor/status-bar';
 import axios from 'axios';
 import './Login.css';
 import ContactUsButton from '../components/ContactUsButton.jsx';
@@ -12,6 +14,13 @@ const LoginOtp = () => {
   const [loading, setLoading] = useState(false);
   const history = useHistory(); 
   const [phoneNumber, setPhoneNumber] = useState('');
+
+  // Ensure the hook is used correctly
+  useStatusBar({
+    overlay: false,
+    style: Style.Dark,
+    color: '#8E2927'
+  });
 
   useEffect(() => {
     const storedPhoneNumber = localStorage.getItem('phoneNumber');
@@ -50,7 +59,6 @@ const LoginOtp = () => {
         localStorage.setItem("token", response.data.access_token);
         if (response.data.user) {
           localStorage.setItem("userDetails", JSON.stringify(response.data.user));
-          
         }
         showToast("success", response.data.message);
         history.push('/home', 'root', 'replace');

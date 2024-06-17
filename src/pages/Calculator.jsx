@@ -5,6 +5,8 @@ import CustomTabBar from "../components/CustomTabBar";
 import Navbar from "../components/Navbar";
 import axios from "axios";
 import { Base_url } from "../config/BaseUrl.jsx";
+import useStatusBar from '../hooks/useStatusBar'; 
+import { StatusBar, Style } from '@capacitor/status-bar';
 
 const gstPercentage = 0.03;
 
@@ -16,6 +18,14 @@ const ratesTable = {
 };
 
 const Calculator = () => {
+
+
+  useStatusBar({
+    overlay: false,
+    style: Style.Light,
+    color: '#F8EBD8'
+  });
+
   const [formDetails, setFormDetails] = useState({
     type: "",
     coin: "",
@@ -106,7 +116,7 @@ const Calculator = () => {
             
           </div>
           <div className="form-item">
-            <label htmlFor="coin">Enter Weight for the item</label>
+            <label htmlFor="coin">Enter Weight for the item (gm)</label>
 
             <input
               list="coin-list"

@@ -8,11 +8,14 @@ import Navbar from '../components/Navbar.jsx';
 import axios from 'axios';
 import { Base_url } from "../config/BaseUrl.jsx";
 import { logOutOutline } from 'ionicons/icons';
+import useStatusBar from '../hooks/useStatusBar'; 
+import { StatusBar, Style } from '@capacitor/status-bar';
 
 const Profile = () => {
 
   const [formDetails, setFormDetails] = useState(
     { 
+      id:"",
       name:"",
       city: "", 
       state: "", 
@@ -25,6 +28,12 @@ const Profile = () => {
   const [states, setStates] = useState([]); // State list
   const [cities, setCities] = useState([]); // Complete list of cities
   const [filteredCities, setFilteredCities] = useState([]); // Filtered list of cities
+
+  useStatusBar({
+    overlay: false,
+    style: Style.Light,
+    color: '#F8EBD8'
+  });
 
   useEffect(() => {
     const fetchStatesAndCities = async () => {
@@ -125,17 +134,20 @@ const Profile = () => {
 
 
   useEffect(()=>{
-   const user = JSON.parse(localStorage.getItem("userDetails"));
+   const user = JSON.parse(localStorage.getItem("userDetails")) || null;
    const storedPhoneNumber = localStorage.getItem('phoneNumber');
-   const userData = { 
-    id:user.user_id,
-    name:user.name,
-    city: user.city, 
-    state: user.state, 
-    phoneNumber: storedPhoneNumber,
-    address: user.address 
-  }
-   setFormDetails(userData);
+   if (user){
+    const userData = { 
+      id:user.user_id,
+      name:user.name,
+      city: user.city, 
+      state: user.state, 
+      phoneNumber: storedPhoneNumber,
+      address: user.address 
+    }
+     setFormDetails(userData);
+   }
+  
    
   },[])
 
