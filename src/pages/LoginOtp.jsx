@@ -60,17 +60,17 @@ const LoginOtp = () => {
         if (response.data.user) {
           localStorage.setItem("userDetails", JSON.stringify(response.data.user));
         }
-        showToast("success", response.data.message);
+        // showToast("success", response.data.message);
         history.push('/home', 'root', 'replace');
       } else if (response.data === "user not found") {
         history.push("/Signup");
         setOtp("");
       } else {
-        showToast('error', response.data.message);
+        showToast('error', 'Wrong Otp');
       }
     } catch (error) {
       console.error('Error verifying OTP:', error);
-      showToast('error', 'An error occurred while verifying OTP. Please try again.');
+      showToast('error', 'Wrong Otp.');
     } finally {
       setLoading(false);
     }
