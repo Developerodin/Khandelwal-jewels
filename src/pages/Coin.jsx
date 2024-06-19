@@ -1,14 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { IonContent, IonHeader, IonPage, IonFooter, IonGrid, IonRow, IonCol, IonCard, IonCardContent } from '@ionic/react';
+import { IonContent, IonHeader, IonPage, IonFooter, IonGrid, IonRow, IonCol } from '@ionic/react';
 import './Coin.css';
 import Navbar from '../components/Navbar';
 import CustomTabBar from '../components/CustomTabBar';
 import axios from 'axios';
 import { Base_url } from "../config/BaseUrl.jsx";
-import useStatusBar from '../hooks/useStatusBar'; 
-import { StatusBar, Style } from '@capacitor/status-bar';
-import ContactUsButton from "../components/ContactUsButton.jsx";
-import { useHistory } from "react-router-dom";
 
 const gstPercentage = 0.03;
 
@@ -38,18 +34,7 @@ const formatPrice = (price) => {
 };
 
 const Coin = () => {
-  const history = useHistory();
   const [goldRates, setGoldRates] = useState(initialGoldRates);
-
-  useStatusBar({
-    overlay: false,
-    style: Style.Light,
-    color: '#F8EBD8'
-  });
-
-  const handleContactUsClick = () => {
-    history.push("/contact");
-  };
 
   useEffect(() => {
     axios.get(`${Base_url}get_price`, {
@@ -76,23 +61,21 @@ const Coin = () => {
       <IonHeader />
       <IonContent className="custom-content" fullscreen style={{ '--ion-background-color': '#F8EBD8' }}>
         <div style={{ padding: '16px', marginBottom: '90px' }}>
-        <h1 style={{paddingLeft:'20px',fontSize:'16px',fontWeight:'600'}}>Current Rate with GST</h1>
+          <div className="image-container">
+            <img src="/assets/goldcoin.png" alt="Gold Coin" className="gold-image" />
+          </div>
           <IonGrid>
-            <IonRow>
-              {goldRates.map((item, index) => (
-                <IonCol size="6" size-md="4" key={index}>
-                  <IonCard className="coin-card">
-                    <img src="/assets/goldcoin.png" alt={`${item.grams} Gold Coin`} className="coin-image" />
-                    <IonCardContent style={{paddingTop: '0px',paddingBottom:'0px'}}>
-                      <div className="coin-weight" style={{color:'black'}}>{item.grams}</div>
-                      <div className="coin-price" style={{paddingTop:'5px'}}>₹ {formatPrice(item.rate)}</div>
-                    </IonCardContent>
-                  </IonCard>
-                </IonCol>
-              ))}
+            <IonRow className="table-header">
+              <IonCol>Gms</IonCol>
+              <IonCol className='ion-text-end'>Current rate with GST</IonCol>
             </IonRow>
+            {goldRates.map((item, index) => (
+              <IonRow key={index} className="table-row">
+                <IonCol>{item.grams}</IonCol>
+                <IonCol className="ion-text-end"> ₹ {formatPrice(item.rate)}</IonCol>
+              </IonRow>
+            ))}
           </IonGrid>
-        <ContactUsButton onClick={handleContactUsClick} buttonName="Contact us" />
         </div>
       </IonContent>
       <IonFooter>
