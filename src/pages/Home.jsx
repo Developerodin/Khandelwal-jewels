@@ -36,7 +36,12 @@ const Home = () => {
         },
       })
       .then((response) => {
-        setPrices(response.data.post);
+        const sortedPrices = response.data.post.sort((a, b) => {
+          if (a.id === "6") return -1;
+          if (b.id === "6") return 1;
+          return a.id - b.id;
+        });
+        setPrices(sortedPrices);
       })
       .catch((error) => {
         console.error("Error fetching prices:", error);
