@@ -126,15 +126,7 @@ const Calculator = () => {
               onChange={handleSelection}
               placeholder="eg. 10 gms"
             />
-            {/* <datalist id="coin-list">
-              {coins.map((coin, index) => (
-                <option
-                  key={index}
-                  value={coin}
-                  style={{ color: "blue", backgroundColor: "yellow" }}
-                />
-              ))}
-            </datalist> */}
+           
           </div>
           <div className="form-item">
             <label htmlFor="makingCharges">Making Charges</label>
