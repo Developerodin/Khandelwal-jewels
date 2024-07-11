@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { IonContent, IonHeader, IonPage, IonFooter } from "@ionic/react";
+import { IonContent, IonHeader, IonPage, IonFooter, IonModal } from "@ionic/react";
 import "./Calculator.css";
 import CustomTabBar from "../components/CustomTabBar";
 import Navbar from "../components/Navbar";
@@ -7,6 +7,8 @@ import axios from "axios";
 import { Base_url } from "../config/BaseUrl.jsx";
 import useStatusBar from '../hooks/useStatusBar'; 
 import { StatusBar, Style } from '@capacitor/status-bar';
+import LoginModel from "../components/LoginModel";
+import { useHistory } from 'react-router-dom';
 
 const gstPercentage = 0.03;
 
@@ -18,8 +20,6 @@ const ratesTable = {
 };
 
 const Calculator = () => {
-
-
   useStatusBar({
     overlay: false,
     style: Style.Light,
@@ -36,6 +36,26 @@ const Calculator = () => {
 
   const types = ["Coins", "Bars", "Jewellery", "Others"];
   const coins = ["1gm", "2gm", "5gm", "10gm", "25gm", "50gm", "75gm", "100gm"];
+
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+
+  const history = useHistory();
+
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("userDetails")) || null;
+    const storedPhoneNumber = localStorage.getItem('phoneNumber');
+    if (user) {
+      const userData = {
+        id: user.user_id,
+        name: user.name,
+        city: user.city,
+        state: user.state,
+        phoneNumber: storedPhoneNumber,
+      }
+    } else {
+      setIsLoginModalOpen(true);
+    }
+  }, []);
 
   useEffect(() => {
     axios
@@ -86,6 +106,11 @@ const Calculator = () => {
     return `₹ ${new Intl.NumberFormat("en-IN").format(price)}`;
   };
 
+  const handleInitialModalClose = () => {
+    setIsLoginModalOpen(false);
+    history.push("/Login");
+  };
+
   return (
     <IonPage>
       <Navbar />
@@ -98,7 +123,6 @@ const Calculator = () => {
         <div className="custom-title">Rate Calculator</div>
         <div className="form-container">
           <div className="form-item">
-            
             <label htmlFor="type">Select the item</label>
             <select
               id="type"
@@ -113,11 +137,9 @@ const Calculator = () => {
                 </option>
               ))}
             </select>
-            
           </div>
           <div className="form-item">
             <label htmlFor="coin">Enter Weight for the item (gm)</label>
-
             <input
               list="coin-list"
               id="coin"
@@ -126,7 +148,6 @@ const Calculator = () => {
               onChange={handleSelection}
               placeholder="eg. 10 gms"
             />
-           
           </div>
           <div className="form-item">
             <label htmlFor="makingCharges">Making Charges</label>
@@ -134,7 +155,7 @@ const Calculator = () => {
               type="text"
               id="makingCharges"
               name="makingCharges"
-              value=  {formDetails.makingCharges}
+              value={formDetails.makingCharges}
               readOnly
               placeholder="00000"
               style={{ borderRadius: "8px", backgroundColor: "#F2DFC4" }}
@@ -157,6 +178,8 @@ const Calculator = () => {
       <IonFooter>
         <CustomTabBar />
       </IonFooter>
+
+      <LoginModel isOpen={isLoginModalOpen} onClose={() => setIsLoginModalOpen(false)} />
     </IonPage>
   );
 };

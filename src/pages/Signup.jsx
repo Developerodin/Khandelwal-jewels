@@ -86,6 +86,7 @@ const Signup = () => {
         console.log('Form successfully submitted', response);
         if(response.data.status === "success"){
           history.push('/home');
+          window.location.reload();
         }
        
       })

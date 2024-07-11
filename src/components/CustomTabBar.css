@@ -1,7 +1,7 @@
 .custom-tab-bar {
     background: #8E2927;
     border-radius: 80px;
-    height: 73px; /* Adjust the height as needed */
+    height: 73px; 
     margin: 0 15px 10px 21px; /* Adding margins for spacing from left, right, and bottom */
     padding: 5px;
     display: flex;

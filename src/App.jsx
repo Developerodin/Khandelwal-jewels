@@ -73,9 +73,9 @@ return <IonApp>
             <Signup />
           </Route>
           <Route exact path="/">
-            <Redirect to="/Login" />
+            <Redirect to="/home" />
           </Route>
-          <Redirect  path="/" to={Auth ? "/home" : "/Login" }  exact/>
+          {/* <Redirect  path="/" to={Auth ? "/home" : "/Login" }  exact/> */}
         </IonRouterOutlet>
         
       

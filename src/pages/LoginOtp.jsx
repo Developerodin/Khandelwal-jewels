@@ -27,7 +27,7 @@ const LoginOtp = () => {
     if (storedPhoneNumber) {
       setPhoneNumber(storedPhoneNumber);
     } else {
-      history.push('/login'); 
+      history.push('/Login'); 
     }
   }, [history]);
 
@@ -61,7 +61,8 @@ const LoginOtp = () => {
           localStorage.setItem("userDetails", JSON.stringify(response.data.user));
         }
         // showToast("success", response.data.message);
-        history.push('/home', 'root', 'replace');
+        history.push('/home');
+        // window.location.reload();
       } else if (response.data === "user not found") {
         history.push("/Signup");
         setOtp("");
