@@ -4,7 +4,7 @@ import './Navbar.css'; // Import the CSS file for custom styling
 
 const Navbar = () => {
   return (
-    <IonHeader>
+    <IonHeader style={{marginTop: '40px'}}>
       
         <div className="header-logo">
           <div className="icon-background">
