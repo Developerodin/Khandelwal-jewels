@@ -1,8 +1,8 @@
 import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'com.khandelwal.jewels',
-  appName: 'khandelwal-jewels',
+  appId: 'com.khandelwal.abhushan',
+  appName: 'Khandelwal Abhushan',
   webDir: 'dist'
 };
 
