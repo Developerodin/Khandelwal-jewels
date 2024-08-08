@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { IonContent, IonPage, IonFooter, IonButton, IonIcon } from '@ionic/react';
+import { IonContent, IonPage, IonFooter, IonButton, IonIcon ,IonToast } from '@ionic/react';
 import './Profile.css';
 import CityStateModal from '../components/CityStateModal.jsx';
 import ContactUsButton from '../components/ContactUsButton.jsx';
@@ -15,8 +15,8 @@ const Profile = () => {
 
   const [formDetails, setFormDetails] = useState(
     { 
-      id:"",
-      name:"",
+      id: "",
+      name: "",
       city: "", 
       state: "", 
       phoneNumber: "",
@@ -28,6 +28,7 @@ const Profile = () => {
   const [states, setStates] = useState([]); // State list
   const [cities, setCities] = useState([]); // Complete list of cities
   const [filteredCities, setFilteredCities] = useState([]); // Filtered list of cities
+  const [showToast, setShowToast] = useState(false); // Toast state
 
   useStatusBar({
     overlay: false,
@@ -43,7 +44,7 @@ const Profile = () => {
             'Content-Type': 'multipart/form-data',
           },
         });
-        setCities(citiesResponse.data.post); // Adjust according to the API response structure
+        setCities(citiesResponse.data.post); 
 
         // Extract unique states from cities data
         const uniqueStates = [
@@ -58,15 +59,6 @@ const Profile = () => {
     fetchStatesAndCities();
   }, []);
 
-  // useEffect(() => {
-  //   const storedPhoneNumber = localStorage.getItem('phoneNumber');
-  //   if (storedPhoneNumber) {
-  //     setFormDetails({ ...formDetails, phoneNumber: storedPhoneNumber });
-  //   } else {
-  //     console.error('Phone number is missing');
-  //   }
-  // }, []);
-
   const handleChange = (e) => {
     setFormDetails({ ...formDetails, [e.target.name]: e.target.value });
   };
@@ -78,8 +70,7 @@ const Profile = () => {
     formData.append('city', formDetails.city);
     formData.append('state', formDetails.state);
     formData.append('address', formDetails.address);
-
-   
+    formData.append('phone', formDetails.phoneNumber);
 
     axios.post(`${Base_url}auth/user_update`, formData, {
       headers: {
@@ -88,10 +79,11 @@ const Profile = () => {
     })
       .then(response => {
         console.log('Profile updated successfully:', response);
-        // Optionally, redirect or give feedback to the user
+        setShowToast(true);
+  
         if (response.data.user) {
           localStorage.setItem("userDetails", JSON.stringify(response.data.user));
-           
+          localStorage.setItem("phoneNumber", formDetails.phoneNumber); // Store phoneNumber in localStorage
         }
       })
       .catch(error => {
@@ -106,63 +98,54 @@ const Profile = () => {
 
   const handleStateSelect = (state) => {
     setFormDetails({ ...formDetails, state });
-    // Filter cities based on the selected state
-    // const filtered = [
-    //   ...new Set(cities.filter(city => city.state_name === state)),
-    // ];
+    
     const uniqueStates = [...new Set(cities.filter(item => item.state_name === state))];
-    console.log(uniqueStates);
-               const uniqueCity = [...new Set(uniqueStates.map(item => item.city_name))];
-                console.log(uniqueCity);
-    // const filtered = cities.filter(city => city.state_name === state);
+    const uniqueCity = [...new Set(uniqueStates.map(item => item.city_name))];
     setFilteredCities(uniqueCity);
     setIsStateModalOpen(false);
-    setIsCityModalOpen(true); // Open city modal after selecting state
+    setIsCityModalOpen(true); 
   };
-  
+
   const handleKeyDown = (event) => {
     if (event.key === 'Enter') {
       handleContinue();
     }
   };
 
-  const handleLogout = ()=>{
+  const handleLogout = () => {
     localStorage.clear();
-    window.location.href = "/Login";
-  
-  }
+    window.location.href = "/signup";
+  };
 
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("userDetails")) || null;
+    const storedPhoneNumber = localStorage.getItem('phoneNumber');
+    const storedFullName = localStorage.getItem('fullName');
+    const storedUser_id = localStorage.getItem('user_id');
 
-  useEffect(()=>{
-   const user = JSON.parse(localStorage.getItem("userDetails")) || null;
-   const storedPhoneNumber = localStorage.getItem('phoneNumber');
-   if (user){
-    const userData = { 
-      id:user.user_id,
-      name:user.name,
-      city: user.city, 
-      state: user.state, 
-      phoneNumber: storedPhoneNumber,
-      address: user.address 
+    if (user) {
+      const userData = { 
+        id: user.user_id,
+        name: user.name,
+        city: user.city, 
+        state: user.state, 
+        phoneNumber: storedPhoneNumber || "", // Use stored phone number
+        address: user.address 
+      };
+      setFormDetails(userData);
+    } else if (storedPhoneNumber && storedFullName) {
+      setFormDetails({ ...formDetails, phoneNumber: storedPhoneNumber, name: storedFullName, id: storedUser_id });
     }
-     setFormDetails(userData);
-   }
-  
-   
-  },[])
+  }, []);
 
   return (
     <IonPage>
       <Navbar />
       <IonContent className="ion-padding" fullscreen style={{ '--ion-background-color': '#F8EBD8' }}>
-        <div className="custom-title"  >
+        <div className="custom-title">
           <span>Personal Details</span>
-
-         
-          <IonIcon onClick={handleLogout} style={{fontSize:"30px",color:"#b71c1c"}} icon={logOutOutline}></IonIcon>
-          
-
-          </div>
+          <IonIcon onClick={handleLogout} style={{ fontSize: "30px", color: "#b71c1c" }} icon={logOutOutline}></IonIcon>
+        </div>
         <div className="form-container">
           <label htmlFor="fullName">Full name</label>
           <input
@@ -182,7 +165,7 @@ const Profile = () => {
             id="phoneNumber"
             name="phoneNumber"
             value={formDetails.phoneNumber}
-        
+            onChange={handleChange}
             placeholder="Enter your phone number"
             style={{ marginBottom: '16px' }}
             onKeyDown={handleKeyDown}
@@ -229,7 +212,7 @@ const Profile = () => {
           isOpen={isStateModalOpen}
           onClose={() => setIsStateModalOpen(false)}
           onSelect={handleStateSelect}
-          data={states.map(state => state.state_name)} // Displaying state names
+          data={states.map(state => state.state_name)} 
           selectedItem={formDetails.state}
         />
 
@@ -237,8 +220,16 @@ const Profile = () => {
           isOpen={isCityModalOpen}
           onClose={() => setIsCityModalOpen(false)}
           onSelect={handleCitySelect}
-          data={filteredCities} // Displaying city names
+          data={filteredCities} 
           selectedItem={formDetails.city}
+        />
+        <IonToast 
+          isOpen={showToast}
+          onDidDismiss={() => setShowToast(false)}
+          message="Profile updated successfully"
+          color={"danger"}
+          position="top"
+          duration={3000}
         />
       </IonContent>
       <IonFooter>

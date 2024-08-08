@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { IonContent, IonPage } from "@ionic/react";
+import { IonContent, IonPage, IonToast } from "@ionic/react";
 import { useHistory } from "react-router-dom";
 import useStatusBar from '../hooks/useStatusBar'; 
 import axios from "axios";
@@ -11,12 +11,15 @@ import { StatusBar, Style } from '@capacitor/status-bar';
 
 const Signup = () => {
   const [fullName, setFullName] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [user_id, setUser_id] = useState("");
   const [formDetails, setFormDetails] = useState({ city: "", state: "" });
   const [states, setStates] = useState([]);
   const [cities, setCities] = useState([]);
   const [filteredCities, setFilteredCities] = useState([]);
   const [isCityModalOpen, setIsCityModalOpen] = useState(false);
   const [isStateModalOpen, setIsStateModalOpen] = useState(false);
+  const [showToast, setShowToast] = useState(false); // Toast state
   const history = useHistory();
 
   useStatusBar({
@@ -49,49 +52,85 @@ const Signup = () => {
 
   useEffect(() => {
     const storedPhoneNumber = localStorage.getItem('phoneNumber');
-    if (!storedPhoneNumber) {
-      console.error('Phone number is missing');
+    if (storedPhoneNumber) {
+      checkPhoneNumber(storedPhoneNumber);
     }
   }, []);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormDetails({
-      ...formDetails,
-      [name]: value,
-    });
+  const checkPhoneNumber = async (phone) => {
+    try {
+      const formData1 = new FormData();
+      formData1.append('mobile_number', phone);
+
+      const response = await axios.post(`${Base_url}auth/number_check`, formData1, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+
+      if (response.data.status === "success") {
+        const user = response.data.user;
+        setUser_id(user.user_id);
+        localStorage.setItem('phoneNumber', phoneNumber);
+        localStorage.setItem('fullName', fullName);
+        localStorage.setItem('user_id', user.user_id);
+        history.push('/home');
+      }
+    } catch (error) {
+      console.error('Phone number check error:', error);
+    }
   };
 
-  const handleContinue = () => {
-    const storedPhoneNumber = localStorage.getItem('phoneNumber');
-
-    if (!storedPhoneNumber) {
-      console.error('Phone number is missing');
+  const handleContinue = async () => {
+    if (!phoneNumber || !fullName) {
+      setShowToast(true); // Show toast if fields are empty
       return;
     }
 
-    const formData = new FormData();
-    formData.append('name', fullName);
-    formData.append('city', formDetails.city);
-    formData.append('state', formDetails.state);
-    formData.append('address', "");
-    formData.append('mobile_number', storedPhoneNumber);
+    try {
+      const formData1 = new FormData();
+      formData1.append('mobile_number', phoneNumber);
 
-    axios.post(`${Base_url}auth/register`, formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    })
-      .then(response => {
-        console.log('Form successfully submitted', response);
-        if(response.data.status === "success"){
+      const checkResponse = await axios.post(`${Base_url}auth/number_check`, formData1, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+
+      if (checkResponse.data.status === "success") {
+        const user = checkResponse.data.user;
+        setUser_id(user.user_id);
+        localStorage.setItem('phoneNumber', phoneNumber);
+        localStorage.setItem('fullName', fullName);
+        localStorage.setItem('user_id', user.user_id);
+        history.push('/home');
+      } else {
+        
+        const formData = new FormData();
+        formData.append('name', fullName);
+        formData.append('city', "");
+        formData.append('state', "");
+        formData.append('address', "");
+        formData.append('mobile_number', phoneNumber);
+
+        const registerResponse = await axios.post(`${Base_url}auth/register`, formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        });
+
+        if (registerResponse.data.status === "success") {
+          const user = registerResponse.data.user;
+          setUser_id(user.user_id); 
+          localStorage.setItem('phoneNumber', phoneNumber);
+          localStorage.setItem('fullName', fullName);
+          localStorage.setItem('user_id', user.user_id); 
           history.push('/home');
         }
-       
-      })
-      .catch(error => {
-        console.error('Form submission error:', error);
-      });
+      }
+    } catch (error) {
+      console.error('Form submission error:', error);
+    }
   };
 
   const handleCitySelect = (city) => {
@@ -123,6 +162,16 @@ const Signup = () => {
         <h2 style={{ fontSize: '28px' }}>New user?</h2>
         <h3 style={{ fontSize: '28px', marginTop: '0' }}>Create an account</h3>
         <div className="login-form signup">
+          <label className="custom-label">Phone number</label>
+          <input
+            value={phoneNumber}
+            placeholder="Enter your phone number"
+            onChange={(e) => setPhoneNumber(e.target.value)}
+            type="tel"
+            className="custom-input"
+            onKeyDown={handleKeyDown}
+          />
+
           <label className="custom-label">Full name </label>
           <input
             value={fullName}
@@ -131,29 +180,6 @@ const Signup = () => {
             type="text"
             className="custom-input"
             onKeyDown={handleKeyDown}
-          />
-
-          <label className="custom-label">State</label>
-          <input
-            value={formDetails.state}
-            name="state"
-            placeholder="Enter or select your state"
-            onFocus={() => setIsStateModalOpen(true)}
-            className="custom-input"
-            readOnly
-            onKeyDown={handleKeyDown}
-          />
-
-          <label className="custom-label">City</label>
-          <input
-            value={formDetails.city}
-            name="city"
-            placeholder="Enter or select your city"
-            onFocus={() => setIsCityModalOpen(true)}
-            className="custom-input"
-            readOnly
-            onKeyDown={handleKeyDown}
-
           />
 
           <ContactUsButton onClick={handleContinue} buttonName="Explore" onKey />
@@ -173,6 +199,15 @@ const Signup = () => {
           onSelect={handleStateSelect}
           data={states.map(state => state.state_name)}
           selectedItem={formDetails.state}
+        />
+
+        <IonToast
+          isOpen={showToast}
+          onDidDismiss={() => setShowToast(false)}
+          message="Phone number and full name are required!"
+          duration={2000}
+          color="danger"
+          position="top" 
         />
       </IonContent>
     </IonPage>

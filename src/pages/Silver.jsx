@@ -9,14 +9,16 @@ import { Base_url } from "../config/BaseUrl.jsx";
 const gstPercentage = 0.03;
 
 const initialGoldRates = [
-  { grams: '1 gm', rate: 0 },
-  { grams: '2 gm', rate: 0 },
-  { grams: '5 gm', rate: 0 },
-  { grams: '10 gm', rate: 0 },
-  { grams: '25 gm', rate: 0 },
-  { grams: '50 gm', rate: 0 },
-  { grams: '75 gm', rate: 0 },
-  { grams: '100 gm', rate: 0 },
+    { grams: '1 gm', rate: 0 },
+    { grams: '5 gm', rate: 0 },
+    { grams: '10 gm', rate: 0 },
+    
+    { grams: '50 gm', rate: 0 },
+    
+    { grams: '100 gm', rate: 0 },
+    { grams: '250 gm', rate: 0 },
+    { grams: '500 gm', rate: 0 },
+    { grams: '1000 gm', rate: 0 },
 ];
 
 const calculateFinalRates = (baseRate, gstPercentage) => {
@@ -33,18 +35,18 @@ const formatPrice = (price) => {
   return new Intl.NumberFormat("en-IN").format(price);
 };
 
-const Coin = () => {
+const Silver = () => {
   const [goldRates, setGoldRates] = useState(initialGoldRates);
 
   useEffect(() => {
-    const fetchGoldPrice = () => {
+    const fetchSilverPrice = () => {
         axios.get(`${Base_url}get_price`, {
             headers: {
                 'Content-Type': 'multipart/form-data',
             },
         })
         .then(response => {
-            const priceData = response.data.post.find(price => price.name === "24k & 91.6 Gold");
+            const priceData = response.data.post.find(price => price.name === "Silver MCX");
             if (priceData) {
                 const baseRate = parseFloat(priceData.price);
                 const updatedRates = calculateFinalRates(baseRate, gstPercentage);
@@ -52,13 +54,13 @@ const Coin = () => {
             }
         })
         .catch(error => {
-            console.error('Error fetching gold price:', error);
+            console.error('Error fetching silver price:', error);
         });
     };
 
-    fetchGoldPrice(); // Initial call
+    fetchSilverPrice(); 
 
-    const intervalId = setInterval(fetchGoldPrice, 10000);
+    const intervalId = setInterval(fetchSilverPrice, 10000); 
 
     return () => clearInterval(intervalId); 
 }, []);
@@ -70,7 +72,7 @@ const Coin = () => {
       <IonContent className="custom-content" fullscreen style={{ '--ion-background-color': '#F8EBD8' }}>
         <div style={{ padding: '16px', marginBottom: '90px' }}>
           <div className="image-container">
-            <img src="/assets/goldcoin.png" alt="Gold Coin" className="gold-image" />
+            <img src="/assets/silver-coin.png" alt="Silver Coin" className="gold-image" />
           </div>
           <IonGrid>
             <IonRow className="table-header">
@@ -93,4 +95,4 @@ const Coin = () => {
   );
 };
 
-export default Coin;
+export default Silver;

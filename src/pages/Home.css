@@ -1,7 +1,24 @@
 .custom-h1 {
-  font-size: 16px;
- 
+  font-size: 18px;
+  color: #A5590F;
   font-weight:600;  
+  text-align: center;
+  margin-top: 0;
+}
+
+.header-info {
+  display: flex;
+  justify-content: space-evenly;
+  margin-bottom: 20px;
+  font-size: 16px;
+  
+  
+}
+
+.header-info p {
+  margin: 0;
+  color: #A5590F;
+  font-weight: 600;
 }
 
 

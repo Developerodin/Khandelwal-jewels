@@ -38,23 +38,34 @@ const Calculator = () => {
   const coins = ["1gm", "2gm", "5gm", "10gm", "25gm", "50gm", "75gm", "100gm"];
 
   useEffect(() => {
-    axios
-      .get(`${Base_url}get_price`, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      })
-      .then((response) => {
-        const priceData = response.data.post.find(
-          (price) => price.name === "24k & 91.6 Gold"
-        );
-        if (priceData) {
-          setGoldRatePerGram(parseFloat(priceData.price));
-        }
-      })
-      .catch((error) => {
-        console.error("Error fetching gold price:", error);
-      });
+    const fetchGoldPrice = () => {
+      axios
+        .get(`${Base_url}get_price`, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        })
+        .then((response) => {
+          const priceData = response.data.post.find(
+            (price) => price.name === "24k & 91.6 Gold"
+          );
+          if (priceData) {
+            setGoldRatePerGram(parseFloat(priceData.price));
+          }
+        })
+        .catch((error) => {
+          console.error("Error fetching gold price:", error);
+        });
+    };
+  
+    
+    fetchGoldPrice();
+  
+    
+    const intervalId = setInterval(fetchGoldPrice, 10000);
+  
+    // Clear interval on component unmount
+    return () => clearInterval(intervalId);
   }, []);
 
   const handleSelection = (e) => {
@@ -72,8 +83,8 @@ const Calculator = () => {
       const gst = subtotal * gstPercentage;
       const finalRate = subtotal + gst;
 
-      updatedDetails.makingCharges = formatPrice(makingCharges.toFixed(0));
-      updatedDetails.finalRate = formatPrice(finalRate.toFixed(0));
+      updatedDetails.makingCharges = formatPrice(makingCharges.toFixed(2));
+      updatedDetails.finalRate = formatPrice(finalRate.toFixed(2));
     } else {
       updatedDetails.makingCharges = 0;
       updatedDetails.finalRate = 0;

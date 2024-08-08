@@ -18,8 +18,8 @@ const useStatusBar = (options) => {
   useIonViewDidLeave(() => {
     // Reset to default status bar style if needed
     StatusBar.setOverlaysWebView({ overlay: false });
-    StatusBar.setStyle({ style: Style.Default }); // Default style
-    StatusBar.setBackgroundColor({ color: '#8E2927' }); // Default color
+    StatusBar.setStyle({ style: Style.Light }); // Default style
+    StatusBar.setBackgroundColor({ color: '#F8EBD8' }); // Default color
   });
 };
 

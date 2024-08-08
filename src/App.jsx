@@ -1,12 +1,8 @@
+import React, { useEffect } from 'react';
 import { Redirect, Route } from 'react-router-dom';
 import {
   IonApp,
-  IonIcon,
-  IonLabel,
   IonRouterOutlet,
-  IonTabBar,
-  IonTabButton,
-  IonTabs,
   setupIonicReact
 } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
@@ -18,7 +14,7 @@ import Contact from './pages/Contact.jsx';
 import Login from './pages/Login.jsx';
 import LoginOtp from './pages/LoginOtp.jsx';
 import Signup from './pages/Signup.jsx';
-
+import Silver from './pages/Silver.jsx';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -42,45 +38,49 @@ import './theme/variables.css';
 setupIonicReact();
 
 const App = () => {
-  const Auth = localStorage.getItem("Auth") || false;
+  const Auth = localStorage.getItem("phoneNumber") || false;
 
-return <IonApp>
-    <IonReactRouter>
-      
+  
+
+  return (
+    <IonApp>
+      <IonReactRouter>
         <IonRouterOutlet>
           <Route exact path="/home">
             <Home />
           </Route>
-          <Route exact path="/coin">
+          <Route path="/coin">
             <Coin />
           </Route>
-          <Route  path="/calculator">
+          <Route path="/silver">
+            <Silver />
+          </Route>
+          <Route path="/calculator">
             <Calculator />
           </Route>
-          <Route  path="/profile">
+          <Route path="/profile">
             <Profile />
           </Route>
-          <Route  path="/contact">
+          <Route path="/contact">
             <Contact />
           </Route>
-          <Route  path="/login">
+          <Route path="/login">
             <Login />
           </Route>
-          <Route  path="/loginotp">
+          <Route path="/loginotp">
             <LoginOtp />
           </Route>
-          <Route  path="/signup">
+          <Route path="/signup">
             <Signup />
           </Route>
           <Route exact path="/">
-            <Redirect to="/Login" />
+            <Redirect to="/signup" />
           </Route>
-          <Redirect  path="/" to={Auth ? "/home" : "/Login" }  exact/>
+          <Redirect path="/" to={Auth ? "/home" : "/signup"} exact />
         </IonRouterOutlet>
-        
-      
-    </IonReactRouter>
-  </IonApp>
+      </IonReactRouter>
+    </IonApp>
+  );
 };
 
 export default App;
